@@ -25,11 +25,42 @@ describe 'libvirt::network' do
     'content' =>
 "<network>
   <name>direct-net</name>
-  <forward mode='bridge' dev='eth0'/>
+  <forward mode='bridge' dev='eth0'>
     <interface dev='eth0'/>
   </forward>
 </network>
 ",
   })}
+
+  context 'pxe boot network' do
+    let(:title) { 'pxe' }
+    dhcp = {
+      'start' => '192.168.122.2',
+      'end'   => '192.168.122.254',
+      'bootp_file' => 'pxelinux.0',
+    }
+    ip = {
+      'address' => '192.168.122.1',
+      'netmask' => '255.255.255.0',
+      'dhcp'    => dhcp,
+    }
+    let(:params) {{ :forward_mode => 'nat', :forward_dev => 'virbr0', :ip => [ ip ] }}
+
+    it { should contain_libvirt__network('pxe').with({ 'ensure' => 'present'} )}
+    it { should contain_file("#{network_dir}/pxe.xml").with({
+      'content' =>
+"<network>
+  <name>pxe</name>
+  <forward mode='nat' dev='virbr0'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+      <bootp file='pxelinux.0'/>
+    </dhcp>
+  </ip>
+</network>
+",
+  })}
+  end
 
 end
