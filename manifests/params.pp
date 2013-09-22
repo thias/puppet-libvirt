@@ -8,16 +8,18 @@ class libvirt::params {
   $libvirt_package = $::osfamily? {
     'RedHat' => "libvirt.${::architecture}",
     'Debian' => 'libvirt-bin',
+    default  => 'libvirt'
   }
 
   $virtinst_package = $::osfamily? {
     'RedHat' => 'python-virtinst',
     'debian' => 'virtinst',
+    default  => 'python-virtinst'
   }
 
   $libvirt_service = $::osfamily? {
-    'RedHat' => 'libvirtd',
     'Debian' => 'libvirt-bin',
+    default  => 'libvirtd'
   }
 }
 
