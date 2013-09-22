@@ -38,8 +38,9 @@ class libvirt (
     alias  => 'libvirt',
   }
 
-  service { $libvirt::params::libvirt_service:
+  service { 'libvirtd':
     ensure    => running,
+    name      => $libvirt::params::libvirt_service,
     enable    => true,
     hasstatus => true,
     require   => Package['libvirt'],

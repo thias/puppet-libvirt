@@ -2,8 +2,7 @@
 
 ## Overview
 
-Libvirt module. Useful on minimal Red Hat Enterprise Linux installations which
-need to be configured as KVM virtualization hosts.
+Libvirt module. Useful on minimal Red Hat Enterprise Linux and Debian/Ubuntu installations which need to be configured as KVM virtualization hosts.
 
 * `libvirt` : Main class to install, enable and configure libvirt.
 
