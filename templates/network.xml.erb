@@ -1,0 +1,18 @@
+<network>
+  <name><%= @name -%></name>
+  <%- if @bridge -%>
+  <bridge name='<%= @bridge -%>' stp='on' delay='0'/>
+  <%- end -%>
+  <%- if @mac -%>
+  <mac address='<%= @mac -%>'/>
+  <%- end -%>
+  <%- if @forward_mode -%>
+  <forward mode='<%= @forward_mode -%>'<%-if @forward_dev -%> dev='<%= @forward_dev -%>'<%-end-%><%-if @forward_interfaces -%>/<%-end-%>>
+  <%-  if @forward_interfaces -%>
+  <%-    @forward_interfaces.each do |dev| -%>
+    <interface dev='<%= dev -%>'/>
+  <%-    end -%>
+  </forward>
+  <%-  end -%>
+  <%-end -%>
+</network>
