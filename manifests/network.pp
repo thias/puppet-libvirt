@@ -54,33 +54,77 @@
 # }
 #
 define libvirt::network (
-  $ensure = 'present',
-  $autostart = false,
-  $bridge = undef,
-  $forward_mode = undef,
-  $forward_dev = undef,
+  $ensure             = 'present',
+  $autostart          = false,
+  $bridge             = undef,
+  $forward_mode       = undef,
+  $forward_dev        = undef,
   $forward_interfaces = [],
-  $ip = undef,
-  $mac = undef,
+  $ip                 = undef,
+  $mac                = undef,
 ) {
   validate_bool ($autostart)
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
     'Ensure must be one of defined (present), enabled (running), or undefined (absent).')
 
-  case $ensure {
-    'present', 'defined', 'enabled', 'running': {
-      file { "/etc/libvirt/qemu/networks/${title}.xml":
-        ensure  => present,
-        content => template('libvirt/network.xml.erb')
+  Exec {
+    cwd  => '/',
+    path => '/bin:/usr/bin',
+    user => 'root',
+  }
+
+  $ensure_file = $ensure? {
+    /(present|defined|enabled|running)/ => 'present',
+    /(undefined|absent)/                => 'absent',
+  }
+
+  case $ensure_file {
+    'present': {
+
+      $network_file   = "/etc/libvirt/qemu/networks/${title}.xml"
+      $autostart_file = "/etc/libvirt/qemu/networks/autostart/${title}.xml"
+
+      $content = template('libvirt/network.xml.erb')
+      exec { "create-${network_file}":
+        command => "cat > ${network_file} <<EOF\n${content}\nEOF",
+        creates => $network_file,
+        unless  => "test -f ${network_file}",
+      }
+
+      exec { "virsh-net-define-${title}":
+        command => "virsh net-define ${network_file}",
+        unless  => "virsh -q net-list | grep -q ^${title}",
+        require => Exec["create-${network_file}"],
+      }
+
+      if $autostart {
+        exec { "virsh-net-autostart-${title}":
+          command => "virsh net-autostart ${title}",
+          require => Exec["virsh-net-define-${title}"],
+          creates => $autostart_file,
+        }
+      }
+      if $ensure in [ 'enabled', 'running' ] {
+        exec { "virsh-net-start-${title}":
+          command => "virsh net-start ${title}",
+          require => Exec["virsh-net-define-${title}"],
+          unless  => "virsh -q net-list | grep -q '^${title}\s*active'",
+        }
       }
     }
-    'undefined', 'absent': {
-    }
-    default: {
-      notify { 'How did you even get here?':
-        loglevel => 'crit',
+    'absent': {
+      exec { "virsh-net-destroy-${title}":
+        command => "virsh net-destroy ${title}",
+        onlyif  => "virsh -q net-list | grep -q ^${title}\s*active",
       }
+      exec { "virsh-net-undefine-${title}":
+        command => "virsh net-undefine ${title}",
+        onlyif  => "virsh -q net-list | grep -q ^${title}\s*inactive",
+        require => Exec["virsh-net-destroy-${title}"],
+      }
+    }
+    default : {
+      fail ("${module_name} This default case should never be reached in Libvirt::Network{'${title}':} on node ${::fqdn}.")
     }
   }
 }
-
