@@ -67,20 +67,20 @@ define libvirt::network (
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
     'Ensure must be one of defined (present), enabled (running), or undefined (absent).')
 
-  case $ensure {
-    'present', 'defined', 'enabled', 'running': {
-      file { "/etc/libvirt/qemu/networks/${title}.xml":
-        ensure  => present,
-        content => template('libvirt/network.xml.erb')
-      }
-    }
-    'undefined', 'absent': {
-    }
-    default: {
-      notify { 'How did you even get here?':
-        loglevel => 'crit',
-      }
-    }
+  $ensure_file = $ensure? {
+    /(present|defined|enabled|running)/ => 'present',
+    /(undefined|absent)/                => 'absent',
+  }
+  $ensure_link = $autostart? {
+    true    => 'link',
+    default => 'absent'
+  }
+  file { "/etc/libvirt/qemu/networks/${title}.xml":
+    ensure  => $ensure_file,
+    content => template('libvirt/network.xml.erb')
+  }
+  file { "/etc/libvirt/qemu/networks/autostart/${title}.xml":
+    ensure => $ensure_link,
+    target => "../${title}.xml",
   }
 }
-

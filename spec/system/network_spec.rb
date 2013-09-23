@@ -17,7 +17,7 @@ require 'spec_helper_system'
 describe 'libvirt::network' do
   network_dir = '/etc/libvirt/qemu/networks'
 
-  context 'network directly connected via bridge' do 
+  context 'network directly connected via bridge' do
     it 'should create a network directly connected via a bridge' do
       puppet_apply(%{
          class { 'libvirt': }
@@ -30,8 +30,57 @@ describe 'libvirt::network' do
     end
 
     describe file("#{network_dir}/direct-net.xml") do
-      it { should contain "<forward mode='bridge' dev='eth0'/>" }
+      it { should contain "<forward mode='bridge' dev='eth0'>" }
       it { should contain "<interface dev='eth0'/>" }
+    end
+  end
+
+  context 'network directly connected via autostarted bridge' do
+    it 'should create an autostarted network directly connected via a bridge' do
+      puppet_apply(%{
+         class { 'libvirt': }
+         libvirt::network { 'direct-net':
+           autostart          => true,
+           forward_mode       => 'bridge',
+           forward_dev        => 'eth0',
+           forward_interfaces => [ 'eth0']
+         }
+      }) { |r| [0,2].should include r.exit_code}
+    end
+
+    describe file("#{network_dir}/autostart/direct-net.xml") do
+      it { should contain "<forward mode='bridge' dev='eth0'>" }
+      it { should contain "<interface dev='eth0'/>" }
+    end
+  end
+
+  context 'autostarted pxe boot via dhcp' do
+    it 'should create an autostarted network for booting from DHCP' do
+      puppet_apply(%{
+         class { 'libvirt': }
+         $dhcp = {
+           'start' => '192.168.122.2',
+           'end'   => '192.168.122.254',
+           'bootp_file' => 'pxelinux.0',
+         }
+         $ip = {
+           'address' => '192.168.122.1',
+           'netmask' => '255.255.255.0',
+           'dhcp'    => $dhcp,
+         }
+         libvirt::network { 'pxe':
+           autostart    => true,
+           forward_mode => 'nat',
+           forward_dev  => 'virbr0',
+           bridge       => 'virbr0',
+           ip           => [ $ip]
+         }
+      }) { |r| [0,2].should include r.exit_code}
+    end
+
+    describe file("#{network_dir}/autostart/pxe.xml") do
+      it { should contain "<forward mode='nat' dev='virbr0'/>" }
+      it { should contain "<bootp file='pxelinux.0'" }
     end
   end
 

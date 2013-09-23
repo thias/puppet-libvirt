@@ -1,8 +1,5 @@
 <network>
   <name><%= @name -%></name>
-  <%- if @bridge -%>
-  <bridge name='<%= @bridge -%>' stp='on' delay='0'/>
-  <%- end -%>
   <%- if @mac -%>
   <mac address='<%= @mac -%>'/>
   <%- end -%>
@@ -15,6 +12,9 @@
   </forward>
   <%-  end -%>
   <%-end -%>
+  <%- if @bridge -%>
+  <bridge name='<%= @bridge -%>' stp='on' delay='0'/>
+  <%- end -%>
   <%-if @ip -%>
   <%-  @ip.each do |ip| -%>
   <ip<%-if ip['address']-%> address='<%=ip['address']-%>'<%-end-%><%-if ip['netmask']-%> netmask='<%=ip['netmask']-%>'<%-end-%><%-if ip['prefix']-%> prefix='<%=ip['prefix']-%>'<%-end-%>>
