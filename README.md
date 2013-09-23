@@ -18,7 +18,9 @@ Use all of the module's defaults :
 Typical KVM/qemu host for virtualization :
 
 ```puppet
-      class { 'libvirt': mdns_adv => '0' }
+      class { 'libvirt':
+        mdns_adv => false
+      }
 ```
 
 Change even more defaults :
