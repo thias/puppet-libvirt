@@ -67,10 +67,13 @@ define libvirt::network (
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
     'Ensure must be one of defined (present), enabled (running), or undefined (absent).')
 
+  include ::libvirt::params
+
   Exec {
-    cwd  => '/',
-    path => '/bin:/usr/bin',
-    user => 'root',
+    cwd     => '/',
+    path    => '/bin:/usr/bin',
+    user    => 'root',
+    require => Package[$libvirt::params::libvirt_package],
   }
 
   $ensure_file = $ensure? {
