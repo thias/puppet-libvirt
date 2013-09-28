@@ -65,8 +65,11 @@ class libvirt (
     default => 'absent',
   }
   libvirt::network { 'default':
-    ensure    => $def_net,
-    autostart => true,
+    ensure       => $def_net,
+    autostart    => true,
+    forward_mode => 'nat',
+    bridge       => 'virbr0',
+    ip           => $::libvirt::params::default_ip;
   }
 
   # The most useful libvirt-related packages
