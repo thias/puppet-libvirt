@@ -69,7 +69,7 @@ class libvirt (
     autostart    => true,
     forward_mode => 'nat',
     bridge       => 'virbr0',
-    ip           => $::libvirt::params::default_ip;
+    ip           => [ $::libvirt::params::default_ip ],
   }
 
   # The most useful libvirt-related packages
