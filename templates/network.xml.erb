@@ -4,7 +4,7 @@
   <mac address='<%= @mac -%>'/>
   <%- end -%>
   <%- if @forward_mode -%>
-  <forward mode='<%= @forward_mode -%>'<%-if @forward_dev -%> dev='<%= @forward_dev -%>'<%-end-%><%-if @forward_interfaces.empty? -%>/<%-end-%>>
+  <forward<%-if @forward_dev -%> dev='<%= @forward_dev -%>'<%-end-%> mode='<%= @forward_mode -%>'<%-if @forward_interfaces.empty? -%>/<%-end-%>>
   <%-  if !@forward_interfaces.empty? -%>
   <%-    @forward_interfaces.each do |dev| -%>
     <interface dev='<%= dev -%>'/>

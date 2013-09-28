@@ -30,7 +30,7 @@ describe 'libvirt::network' do
     end
 
     describe file("#{network_dir}/direct-net.xml") do
-      it { should contain "<forward mode='bridge' dev='eth0'>" }
+      it { should contain "<forward dev='eth0' mode='bridge'>" }
       it { should contain "<interface dev='eth0'/>" }
     end
   end
@@ -49,7 +49,7 @@ describe 'libvirt::network' do
     end
 
     describe file("#{network_dir}/autostart/direct-net.xml") do
-      it { should contain "<forward mode='bridge' dev='eth0'>" }
+      it { should contain "<forward dev='eth0' mode='bridge'>" }
       it { should contain "<interface dev='eth0'/>" }
     end
   end
@@ -79,7 +79,7 @@ describe 'libvirt::network' do
     end
 
     describe file("#{network_dir}/autostart/pxe.xml") do
-      it { should contain "<forward mode='nat' dev='virbr0'/>" }
+      it { should contain "<forward dev='virbr0' mode='nat'/>" }
       it { should contain "<bootp file='pxelinux.0'" }
     end
   end

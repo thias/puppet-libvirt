@@ -10,7 +10,6 @@ describe 'libvirt class' do
     package_name = 'libvirt-bin'
     service_name = 'libvirt-bin'
     virtinst_package = 'virtinst'
-  when 'Debian'
   end
 
   context 'default parameters' do

@@ -26,7 +26,7 @@ describe 'libvirt::network' do
     'content' =>
 "<network>
   <name>direct-net</name>
-  <forward mode='bridge' dev='eth0'>
+  <forward dev='eth0' mode='bridge'>
     <interface dev='eth0'/>
   </forward>
 </network>
@@ -52,7 +52,7 @@ describe 'libvirt::network' do
       'content' =>
 "<network>
   <name>pxe</name>
-  <forward mode='nat' dev='virbr0'/>
+  <forward dev='virbr0' mode='nat'/>
   <bridge name='virbr0' stp='on' delay='0'/>
   <ip address='192.168.122.1' netmask='255.255.255.0'>
     <dhcp>
