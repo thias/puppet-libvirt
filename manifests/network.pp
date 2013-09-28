@@ -70,10 +70,11 @@ define libvirt::network (
   include ::libvirt::params
 
   Exec {
-    cwd     => '/',
-    path    => '/bin:/usr/bin',
-    user    => 'root',
-    require => Package[$libvirt::params::libvirt_package],
+    cwd       => '/',
+    path      => '/bin:/usr/bin',
+    user      => 'root',
+    provider  => 'posix',
+    require   => Service[$libvirt::params::libvirt_service],
   }
 
   $ensure_file = $ensure? {
@@ -96,7 +97,7 @@ define libvirt::network (
 
       exec { "virsh-net-define-${title}":
         command => "virsh net-define ${network_file}",
-        unless  => "virsh -q net-list | grep -q ^${title}",
+        unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}'",
         require => Exec["create-${network_file}"],
       }
 
@@ -111,23 +112,24 @@ define libvirt::network (
         exec { "virsh-net-start-${title}":
           command => "virsh net-start ${title}",
           require => Exec["virsh-net-define-${title}"],
-          unless  => "virsh -q net-list | grep -q '^${title}\s*active'",
+          unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+active'",
         }
       }
     }
     'absent': {
       exec { "virsh-net-destroy-${title}":
         command => "virsh net-destroy ${title}",
-        onlyif  => "virsh -q net-list | grep -q ^${title}\s*active",
+        onlyif  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+active'",
       }
       exec { "virsh-net-undefine-${title}":
         command => "virsh net-undefine ${title}",
-        onlyif  => "virsh -q net-list | grep -q ^${title}\s*inactive",
+        onlyif  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+inactive'",
         require => Exec["virsh-net-destroy-${title}"],
       }
 
       file {[ $network_file, $autostart_file ]:
-        ensure => absent,
+        ensure  => absent,
+        require => Exec["virsh-net-undefine-${title}"],
       }
     }
     default : {

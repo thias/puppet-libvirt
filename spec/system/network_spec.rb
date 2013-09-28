@@ -26,11 +26,10 @@ describe 'libvirt::network' do
       }) { |r| [0,2].should include r.exit_code}
     end
 
-    describe file("#{network_dir}/default.xml") do
-      it { should contain "<forward dev='virbr0' mode='nat'/>" }
-    end
-    describe file("#{network_dir}/autostart/default.xml") do
-      it { should contain "<forward dev='eth0' mode='nat'>" }
+    it 'respond to ping on IP 192.168.122.1 (for interface virbr0)' do
+      shell('ping -c1 -q -I virbr0 192.168.122.1') do |r|
+        r.exit_code.should == 0
+      end
     end
   end
 
@@ -65,9 +64,10 @@ describe 'libvirt::network' do
       }) { |r| [0,2].should include r.exit_code}
     end
 
-    describe file("#{network_dir}/autostart/direct-net.xml") do
-      it { should contain "<forward dev='eth0' mode='bridge'>" }
-      it { should contain "<interface dev='eth0'/>" }
+    it 'respond to ping on public IPs (for interface eth0)' do
+      shell('ping -c1 -q -I eth0 8.8.8.8') do |r|
+        r.exit_code.should == 0
+      end
     end
   end
 
@@ -87,6 +87,7 @@ describe 'libvirt::network' do
          }
          libvirt::network { 'pxe':
            autostart    => true,
+           ensure       => 'running',
            forward_mode => 'nat',
            forward_dev  => 'virbr0',
            bridge       => 'virbr0',
@@ -95,9 +96,10 @@ describe 'libvirt::network' do
       }) { |r| [0,2].should include r.exit_code}
     end
 
-    describe file("#{network_dir}/autostart/pxe.xml") do
-      it { should contain "<forward dev='virbr0' mode='nat'/>" }
-      it { should contain "<bootp file='pxelinux.0'" }
+    it 'respond to ping on IP 192.168.122.1 (for interface virbr0)' do
+      shell('ping -c1 -q -I virbr0 192.168.122.1') do |r|
+        r.exit_code.should == 0
+      end
     end
   end
 
