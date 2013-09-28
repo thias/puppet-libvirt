@@ -67,10 +67,13 @@ define libvirt::network (
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
     'Ensure must be one of defined (present), enabled (running), or undefined (absent).')
 
+  include ::libvirt::params
+
   Exec {
-    cwd  => '/',
-    path => '/bin:/usr/bin',
-    user => 'root',
+    cwd     => '/',
+    path    => '/bin:/usr/bin',
+    user    => 'root',
+    require => Package[$libvirt::params::libvirt_package],
   }
 
   $ensure_file = $ensure? {
@@ -78,11 +81,11 @@ define libvirt::network (
     /(undefined|absent)/                => 'absent',
   }
 
+  $network_file   = "/etc/libvirt/qemu/networks/${title}.xml"
+  $autostart_file = "/etc/libvirt/qemu/networks/autostart/${title}.xml"
+
   case $ensure_file {
     'present': {
-
-      $network_file   = "/etc/libvirt/qemu/networks/${title}.xml"
-      $autostart_file = "/etc/libvirt/qemu/networks/autostart/${title}.xml"
 
       $content = template('libvirt/network.xml.erb')
       exec { "create-${network_file}":
@@ -121,6 +124,10 @@ define libvirt::network (
         command => "virsh net-undefine ${title}",
         onlyif  => "virsh -q net-list | grep -q ^${title}\s*inactive",
         require => Exec["virsh-net-destroy-${title}"],
+      }
+
+      file {[ $network_file, $autostart_file ]:
+        ensure => absent,
       }
     }
     default : {

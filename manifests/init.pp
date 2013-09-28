@@ -61,16 +61,16 @@ class libvirt (
   #}
 
   # The default network, automatically configured... disable it by default
-  if $defaultnetwork {
-    file { '/etc/libvirt/qemu/networks/autostart/default.xml':
-      ensure  => link,
-      target  => '../default.xml',
-      require => Package['libvirt'],
-    }
-  } else {
-    libvirt::network { 'default':
-      ensure => absent,
-    }
+  $def_net = $defaultnetwork? {
+    true    => 'enabled',
+    default => 'absent',
+  }
+  libvirt::network { 'default':
+    ensure       => $def_net,
+    autostart    => true,
+    forward_mode => 'nat',
+    bridge       => 'virbr0',
+    ip           => [ $::libvirt::params::default_ip ],
   }
 
   # The most useful libvirt-related packages

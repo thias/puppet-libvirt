@@ -22,15 +22,16 @@ describe 'libvirt::network' do
   let(:params) {{ :forward_mode => 'bridge', :forward_dev => 'eth0', :forward_interfaces => [ 'eth0', ] }}
 
   it { should contain_libvirt__network('direct-net').with({ 'ensure' => 'present'} )}
-  it { should contain_file("#{network_dir}/direct-net.xml").with({
-    'content' =>
-"<network>
+  it { should contain_exec("create-#{network_dir}/direct-net.xml").with({
+    'command' => "cat > #{network_dir}/direct-net.xml <<EOF
+<network>
   <name>direct-net</name>
   <forward dev='eth0' mode='bridge'>
     <interface dev='eth0'/>
   </forward>
 </network>
-",
+
+EOF",
   })}
 
   context 'pxe boot network' do
@@ -48,9 +49,9 @@ describe 'libvirt::network' do
     let(:params) {{ :forward_mode => 'nat', :forward_dev => 'virbr0', :bridge => 'virbr0', :ip => [ ip ] }}
 
     it { should contain_libvirt__network('pxe').with({ 'ensure' => 'present'} )}
-    it { should contain_file("#{network_dir}/pxe.xml").with({
-      'content' =>
-"<network>
+    it { should contain_exec("create-#{network_dir}/pxe.xml").with({
+    'command' => "cat > #{network_dir}/pxe.xml <<EOF
+<network>
   <name>pxe</name>
   <forward dev='virbr0' mode='nat'/>
   <bridge name='virbr0' stp='on' delay='0'/>
@@ -61,26 +62,9 @@ describe 'libvirt::network' do
     </dhcp>
   </ip>
 </network>
-",
+
+EOF",
   })}
-  end
-
-  context 'autostart direct-net network' do
-    let(:title) { 'direct-net' }
-    let(:params) {{ :autostart => true, :forward_mode => 'bridge', :forward_dev => 'eth0', :forward_interfaces => [ 'eth0', ] }}
-
-    it { should contain_libvirt__network('direct-net').with({ 'ensure' => 'present'} )}
-    it { should contain_file("#{autostart_dir}/direct-net.xml").with({ 'target' => '../direct-net.xml' })}
-    it { should contain_file("#{network_dir}/direct-net.xml").with({
-      'content' =>
-"<network>
-  <name>direct-net</name>
-  <forward mode='bridge' dev='eth0'>
-    <interface dev='eth0'/>
-  </forward>
-</network>
-",
-    })}
   end
 
 end
