@@ -1,0 +1,5 @@
+fixtures:
+  symlinks:
+    libvirt: "#{source_dir}" 
+  repositories:
+    stdlib: git://github.com/puppetlabs/puppetlabs-stdlib.git

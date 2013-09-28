@@ -24,21 +24,24 @@ class libvirt (
   $virtinst           = true,
   $qemu               = true,
   # libvirtd.conf options
-  $mdns_adv           = '1',
+  $mdns_adv           = true,
   $unix_sock_group    = 'root',
   $unix_sock_ro_perms = '0777',
   $unix_sock_rw_perms = '0700',
   $unix_sock_dir      = '/var/run/libvirt'
 ) {
 
-  package { "libvirt.${::architecture}":
-    alias => 'libvirt',
+  include libvirt::params
+
+  package { $libvirt::params::libvirt_package:
     ensure => installed,
+    alias  => 'libvirt',
   }
 
   service { 'libvirtd':
-    enable    => true,
     ensure    => running,
+    name      => $libvirt::params::libvirt_service,
+    enable    => true,
     hasstatus => true,
     require   => Package['libvirt'],
   }
@@ -57,22 +60,21 @@ class libvirt (
   #}
 
   # The default network, automatically configured... disable it by default
-  if $defaultnetwork {
-    file { '/etc/libvirt/qemu/networks/autostart/default.xml':
-      ensure  => link,
-      target  => '../default.xml',
-      require => Package['libvirt'],
-    }
-  } else {
-    file { '/etc/libvirt/qemu/networks/autostart/default.xml':
-      ensure  => absent,
-      require => Package['libvirt'],
-    }
+  $def_net = $defaultnetwork? {
+    true    => 'enabled',
+    default => 'absent',
+  }
+  libvirt::network { 'default':
+    ensure       => $def_net,
+    autostart    => true,
+    forward_mode => 'nat',
+    bridge       => 'virbr0',
+    ip           => [ $::libvirt::params::default_ip ],
   }
 
   # The most useful libvirt-related packages
   if $virtinst {
-    package { 'python-virtinst': ensure => installed }
+    package { $libvirt::params::virtinst_package: ensure => installed }
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
