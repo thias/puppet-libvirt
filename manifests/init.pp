@@ -31,14 +31,17 @@ class libvirt (
   $unix_sock_dir      = '/var/run/libvirt'
 ) {
 
-  package { "libvirt.${::architecture}":
-    alias => 'libvirt',
+  include libvirt::params
+
+  package { $libvirt::params::libvirt_package:
     ensure => installed,
+    alias  => 'libvirt',
   }
 
   service { 'libvirtd':
-    enable    => true,
     ensure    => running,
+    name      => $libvirt::params::libvirt_service,
+    enable    => true,
     hasstatus => true,
     require   => Package['libvirt'],
   }
@@ -72,7 +75,7 @@ class libvirt (
 
   # The most useful libvirt-related packages
   if $virtinst {
-    package { 'python-virtinst': ensure => installed }
+    package { $libvirt::params::virtinst_package: ensure => installed }
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
