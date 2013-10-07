@@ -1,4 +1,5 @@
 * Add puppet-rspec and rspec system tests (Igor Galić).
+* Add Debian/Ubuntu support (Igor Galić).
 
 2013-10-04 - 0.1.1
 * Add syntax highlighting tags to the README.
