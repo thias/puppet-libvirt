@@ -1,25 +1,26 @@
-
 # Class: libvirt::params
 #
-# hold values for parameters and variables for each supported platform
+# Hold values for parameters and variables for each supported platform.
 #
 class libvirt::params {
 
-  $libvirt_package = $::osfamily? {
-    'RedHat' => "libvirt.${::architecture}",
-    'Debian' => 'libvirt-bin',
-    default  => 'libvirt'
+  case $::osfamily {
+    'RedHat': {
+      $libvirt_package = "libvirt.${::architecture}"
+      $libvirt_service = 'libvirtd'
+      $virtinst_package = 'python-virtinst'
+    }
+    'Debian': {
+      $libvirt_package = 'libvirt-bin'
+      $libvirt_service = 'libvirt-bin'
+      $virtinst_package = 'virtinst'
+    }
+    default: {
+      $libvirt_package = 'libvirt'
+      $libvirt_service = 'libvirtd'
+      $virtinst_package = 'python-virtinst'
+    }
   }
 
-  $virtinst_package = $::osfamily? {
-    'RedHat' => 'python-virtinst',
-    'debian' => 'virtinst',
-    default  => 'python-virtinst'
-  }
-
-  $libvirt_service = $::osfamily? {
-    'Debian' => 'libvirt-bin',
-    default  => 'libvirtd'
-  }
 }
 

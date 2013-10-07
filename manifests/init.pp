@@ -23,24 +23,25 @@ class libvirt (
   $defaultnetwork     = false,
   $virtinst           = true,
   $qemu               = true,
+  $libvirt_package    = $libvirt::params::libvirt_package,
+  $libvirt_service    = $libvirt::params::libvirt_service,
+  $virtinst_package   = $libvirt::params::virtinst_package,
   # libvirtd.conf options
   $mdns_adv           = '1',
   $unix_sock_group    = 'root',
   $unix_sock_ro_perms = '0777',
   $unix_sock_rw_perms = '0700',
   $unix_sock_dir      = '/var/run/libvirt'
-) {
+) inherits ::libvirt::params {
 
-  include libvirt::params
-
-  package { $libvirt::params::libvirt_package:
+  package { 'libvirt':
     ensure => installed,
-    alias  => 'libvirt',
+    name   => $libvirt_package,
   }
 
   service { 'libvirtd':
     ensure    => running,
-    name      => $libvirt::params::libvirt_service,
+    name      => $libvirt_service,
     enable    => true,
     hasstatus => true,
     require   => Package['libvirt'],
@@ -75,7 +76,7 @@ class libvirt (
 
   # The most useful libvirt-related packages
   if $virtinst {
-    package { $libvirt::params::virtinst_package: ensure => installed }
+    package { $virtinst_package: ensure => installed }
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
