@@ -68,9 +68,8 @@ class libvirt (
       require => Package['libvirt'],
     }
   } else {
-    file { '/etc/libvirt/qemu/networks/autostart/default.xml':
-      ensure  => absent,
-      require => Package['libvirt'],
+    libvirt::network { 'default':
+      ensure => absent,
     }
   }
 
