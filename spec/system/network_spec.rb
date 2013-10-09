@@ -17,6 +17,23 @@ require 'spec_helper_system'
 describe 'libvirt::network' do
   network_dir = '/etc/libvirt/qemu/networks'
 
+  context 'enable default network' do
+    it 'should enable the default network' do
+      puppet_apply(%{
+         class { 'libvirt':
+           defaultnetwork => true
+         }
+      }) { |r| [0,2].should include r.exit_code}
+    end
+
+    describe file("#{network_dir}/default.xml") do
+      it { should contain "<forward dev='virbr0' mode='nat'/>" }
+    end
+    describe file("#{network_dir}/autostart/default.xml") do
+      it { should contain "<forward dev='eth0' mode='nat'>" }
+    end
+  end
+
   context 'network directly connected via bridge' do
     it 'should create a network directly connected via a bridge' do
       puppet_apply(%{
