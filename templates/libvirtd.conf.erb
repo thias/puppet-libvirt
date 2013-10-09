@@ -82,7 +82,7 @@ mdns_adv = 0
 #
 # This is restricted to 'root' by default.
 #unix_sock_group = "libvirt"
-<% if @unix_sock_group != 'root' -%>
+<% if @unix_sock_group -%>
 unix_sock_group = "<%= @unix_sock_group %>"
 <% end -%>
 
@@ -92,7 +92,7 @@ unix_sock_group = "<%= @unix_sock_group %>"
 # Default allows any user. If setting group ownership may want to
 # restrict this to:
 #unix_sock_ro_perms = "0777"
-<% if @unix_sock_ro_perms != '0777' -%>
+<% if @unix_sock_ro_perms -%>
 unix_sock_ro_perms = "<%= @unix_sock_ro_perms %>"
 <% end -%>
 
@@ -105,13 +105,13 @@ unix_sock_ro_perms = "<%= @unix_sock_ro_perms %>"
 # If not using PolicyKit and setting group ownership for access
 # control then you may want to relax this to:
 #unix_sock_rw_perms = "0770"
-<% if @unix_sock_rw_perms != '0700' -%>
+<% if @unix_sock_rw_perms -%>
 unix_sock_rw_perms = "<%= @unix_sock_rw_perms %>"
 <% end -%>
 
 # Set the name of the directory in which sockets will be found/created.
 #unix_sock_dir = "/var/run/libvirt"
-<% if @unix_sock_dir != '/var/run/libvirt' -%>
+<% if @unix_sock_dir -%>
 unix_sock_dir = "<%= @unix_sock_dir %>"
 <% end -%>
 
@@ -141,10 +141,9 @@ unix_sock_dir = "<%= @unix_sock_dir %>"
 #
 # To restrict monitoring of domains you may wish to enable
 # an authentication mechanism here
+#auth_unix_ro = "none"
 <%- if @auth_unix_ro -%>
 auth_unix_ro = "<%= @auth_unix_ro %>"
-<%- else -%>
-#auth_unix_ro = "none"
 <%- end -%>
 
 # Set an authentication scheme for UNIX read-write sockets
@@ -154,10 +153,9 @@ auth_unix_ro = "<%= @auth_unix_ro %>"
 #
 # If the unix_sock_rw_perms are changed you may wish to enable
 # an authentication mechanism here
+#auth_unix_rw = "none"
 <%- if @auth_unix_rw -%>
 auth_unix_rw = "<%= @auth_unix_rw %>"
-<%- else -%>
-#auth_unix_rw = "none"
 <%- end -%>
 
 # Change the authentication scheme for TCP sockets.
