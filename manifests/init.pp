@@ -30,9 +30,9 @@ class libvirt (
   $mdns_adv           = true,
   $unix_sock_group    = 'root',
   $unix_sock_ro_perms = '0777',
-  $auth_unix_ro       = 'none',
+  $auth_unix_ro       = $libvirt::params::auth_unix_ro,
   $unix_sock_rw_perms = '0700',
-  $auth_unix_rw       = 'none',
+  $auth_unix_rw       = $libvirt::params::auth_unix_rw,
   $unix_sock_dir      = '/var/run/libvirt'
 ) inherits ::libvirt::params {
 
