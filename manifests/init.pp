@@ -29,9 +29,9 @@ class libvirt (
   # libvirtd.conf options
   $mdns_adv           = true,
   $unix_sock_group    = $::libvirt::params::unix_sock_group,
-  $unix_sock_ro_perms = $::libvirt::params::auth_unix_ro,
+  $unix_sock_ro_perms = $::libvirt::params::unix_sock_ro_perms,
   $auth_unix_ro       = $::libvirt::params::auth_unix_ro,
-  $unix_sock_rw_perms = $::libvirt::params::auth_unix_rw,
+  $unix_sock_rw_perms = $::libvirt::params::unix_sock_rw_perms,
   $auth_unix_rw       = $::libvirt::params::auth_unix_rw,
   $unix_sock_dir      = $::libvirt::params::unix_sock_dir,
 ) inherits ::libvirt::params {
