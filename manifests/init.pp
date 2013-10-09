@@ -27,7 +27,7 @@ class libvirt (
   $libvirt_service    = $libvirt::params::libvirt_service,
   $virtinst_package   = $libvirt::params::virtinst_package,
   # libvirtd.conf options
-  $mdns_adv           = '1',
+  $mdns_adv           = true,
   $unix_sock_group    = 'root',
   $unix_sock_ro_perms = '0777',
   $unix_sock_rw_perms = '0700',

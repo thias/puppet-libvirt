@@ -58,8 +58,8 @@
 #
 # This is enabled by default, uncomment this to disable it
 #mdns_adv = 0
-<% if @mdns_adv != '1' -%>
-mdns_adv = <%= @mdns_adv %>
+<% if @mdns_adv -%>
+mdns_adv = 1
 <% end -%>
 
 # Override the default mDNS advertizement name. This must be
