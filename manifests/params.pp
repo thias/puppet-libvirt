@@ -14,6 +14,8 @@ class libvirt::params {
       $libvirt_package = 'libvirt-bin'
       $libvirt_service = 'libvirt-bin'
       $virtinst_package = 'virtinst'
+      $auth_unix_ro = 'none'
+      $auth_unix_rw = 'none'
     }
     default: {
       $libvirt_package = 'libvirt'
