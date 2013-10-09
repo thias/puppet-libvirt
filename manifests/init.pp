@@ -21,6 +21,8 @@
 #
 class libvirt (
   $defaultnetwork     = false,
+  $networks           = {},
+  $networks_defaults  = {},
   $virtinst           = true,
   $qemu               = true,
   $libvirt_package    = $::libvirt::params::libvirt_package,
@@ -122,6 +124,9 @@ class libvirt (
       notify  => Service['libvirtd'],
     }
   }
+
+  # Create Optional networks:
+  create_resources(libvirt::network, $networks, $networks_defaults)
 
 }
 
