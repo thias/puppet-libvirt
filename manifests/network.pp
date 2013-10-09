@@ -1,4 +1,4 @@
-# Define libvirt::network
+# Define: libvirt::network
 #
 # define, configure, enable and autostart a network for libvirt guests
 #
@@ -49,7 +49,7 @@
 #   ensure             => 'enabled',
 #   autostart          => true,
 #   forward_mode       => 'bridge',
-#   forward_dev        => 'eth0',
+#   forward_dev        => 'br0',
 #   forward_interfaces => [ 'eth0', ],
 # }
 #
@@ -70,11 +70,11 @@ define libvirt::network (
   include ::libvirt::params
 
   Exec {
-    cwd       => '/',
-    path      => '/bin:/usr/bin',
-    user      => 'root',
-    provider  => 'posix',
-    require   => Service[$libvirt::params::libvirt_service],
+    cwd      => '/',
+    path     => '/bin:/usr/bin',
+    user     => 'root',
+    provider => 'posix',
+    require  => Service[$::libvirt::params::libvirt_service],
   }
 
   $ensure_file = $ensure? {
@@ -87,20 +87,17 @@ define libvirt::network (
 
   case $ensure_file {
     'present': {
-
       $content = template('libvirt/network.xml.erb')
       exec { "create-${network_file}":
         command => "cat > ${network_file} <<EOF\n${content}\nEOF",
         creates => $network_file,
         unless  => "test -f ${network_file}",
       }
-
       exec { "virsh-net-define-${title}":
         command => "virsh net-define ${network_file}",
         unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}'",
         require => Exec["create-${network_file}"],
       }
-
       if $autostart {
         exec { "virsh-net-autostart-${title}":
           command => "virsh net-autostart ${title}",
@@ -126,8 +123,7 @@ define libvirt::network (
         onlyif  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+inactive'",
         require => Exec["virsh-net-destroy-${title}"],
       }
-
-      file {[ $network_file, $autostart_file ]:
+      file { [ $network_file, $autostart_file ]:
         ensure  => absent,
         require => Exec["virsh-net-undefine-${title}"],
       }

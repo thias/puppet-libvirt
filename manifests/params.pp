@@ -25,8 +25,8 @@ class libvirt::params {
   }
 
   $default_dhcp = {
-    'start'      => '192.168.122.2',
-    'end'        => '192.168.122.254',
+    'start' => '192.168.122.2',
+    'end'   => '192.168.122.254',
   }
   $default_ip = {
     'address' => '192.168.122.1',

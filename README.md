@@ -34,11 +34,11 @@ class { 'libvirt':
 }
 ```
 
-Replace the default network with a PXE boot one:
+Replace the default network with a PXE boot one :
 
 ```puppet
 class { 'libvirt':
-  defaultnetwork => false,
+  defaultnetwork => false, # This is the default
 }
 
 $dhcp = {
@@ -54,7 +54,7 @@ $ip = {
 
 libvirt::network { 'pxe':
   forward_mode => 'nat',
-  bridge       => 'virbr0',
+  forward_dev  => 'virbr0',
   ip           => [ $ip ],
 }
 ```
@@ -65,23 +65,23 @@ While this might look a little convoluted in puppet code, this gives you the abi
 ---
 libvirt_networks:
 
-   pxe:
-     autostart:    true
-     forward_mode: nat
-     bridge:       virbr0
-     ip:
-       - address: 192.168.122.1
-         netmask: 255.255.255.0
-         dhcp:
-            start: 192.168.122.2
-            end:   192.168.122.254
-            bootp_file: pxelinux.0
-   direct:
-     autostart:    true
-     forward_mode: bridge
-     interfaces:
-        - eth0
-     bridge:       eth0
+  pxe:
+    autostart:    true
+    forward_mode: nat
+    forward_dev:  virbr0
+    ip:
+      - address: 192.168.122.1
+        netmask: 255.255.255.0
+        dhcp:
+          start: 192.168.122.2
+          end:   192.168.122.254
+          bootp_file: pxelinux.0
+  direct:
+    autostart:    true
+    forward_mode: bridge
+    forward_dev: br0
+    forward_interfaces:
+      - eth0
 ```
 
 and then in your manifest:
@@ -90,3 +90,4 @@ and then in your manifest:
 $networks = hiera('libvirt_networks', [])
 create_resources($networks, $your_defaults_for_a_network)
 ```
+

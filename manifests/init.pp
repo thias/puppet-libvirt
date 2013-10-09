@@ -23,9 +23,9 @@ class libvirt (
   $defaultnetwork     = false,
   $virtinst           = true,
   $qemu               = true,
-  $libvirt_package    = $libvirt::params::libvirt_package,
-  $libvirt_service    = $libvirt::params::libvirt_service,
-  $virtinst_package   = $libvirt::params::virtinst_package,
+  $libvirt_package    = $::libvirt::params::libvirt_package,
+  $libvirt_service    = $::libvirt::params::libvirt_service,
+  $virtinst_package   = $::libvirt::params::virtinst_package,
   # libvirtd.conf options
   $mdns_adv           = true,
   $unix_sock_group    = 'root',
@@ -33,7 +33,7 @@ class libvirt (
   $auth_unix_ro       = $::libvirt::params::auth_unix_ro,
   $unix_sock_rw_perms = '0700',
   $auth_unix_rw       = $::libvirt::params::auth_unix_rw,
-  $unix_sock_dir      = '/var/run/libvirt'
+  $unix_sock_dir      = '/var/run/libvirt',
 ) inherits ::libvirt::params {
 
   package { 'libvirt':
@@ -57,9 +57,9 @@ class libvirt (
 
   # Not needed until we support changes to it
   #file { '/etc/libvirt/qemu.conf':
-  #    content => template('libvirt/qemu.conf.erb'),
-  #    notify  => Service['libvirtd'],
-  #    require => Package['libvirt'],
+  #  content => template('libvirt/qemu.conf.erb'),
+  #  notify  => Service['libvirtd'],
+  #  require => Package['libvirt'],
   #}
 
   # The default network, automatically configured... disable it by default
