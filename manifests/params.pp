@@ -9,6 +9,8 @@ class libvirt::params {
       $libvirt_package = "libvirt.${::architecture}"
       $libvirt_service = 'libvirtd'
       $virtinst_package = 'python-virtinst'
+      $auth_unix_ro = undef
+      $auth_unix_rw = undef
     }
     'Debian': {
       $libvirt_package = 'libvirt-bin'
@@ -21,6 +23,7 @@ class libvirt::params {
       $libvirt_package = 'libvirt'
       $libvirt_service = 'libvirtd'
       $virtinst_package = 'python-virtinst'
+      $auth_unix_ro = undef
     }
   }
 
