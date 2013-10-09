@@ -1,3 +1,6 @@
+* Add new libvirt::network definition (Igor Galić).
+* Move all current parameters to the params class.
+
 2013-10-07 - 0.2.0
 * Add puppet-rspec and rspec system tests (Igor Galić).
 * Add Debian/Ubuntu support (Igor Galić).
