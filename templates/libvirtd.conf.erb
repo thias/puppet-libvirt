@@ -141,7 +141,11 @@ unix_sock_dir = "<%= @unix_sock_dir %>"
 #
 # To restrict monitoring of domains you may wish to enable
 # an authentication mechanism here
+<%- if @auth_unix_ro -%>
+auth_unix_ro = "<%= @auth_unix_ro %>"
+<%- else -%>
 #auth_unix_ro = "none"
+<%- end -%>
 
 # Set an authentication scheme for UNIX read-write sockets
 # By default socket permissions only allow root. If PolicyKit
@@ -150,7 +154,11 @@ unix_sock_dir = "<%= @unix_sock_dir %>"
 #
 # If the unix_sock_rw_perms are changed you may wish to enable
 # an authentication mechanism here
+<%- if @auth_unix_rw -%>
+auth_unix_rw = "<%= @auth_unix_rw %>"
+<%- else -%>
 #auth_unix_rw = "none"
+<%- end -%>
 
 # Change the authentication scheme for TCP sockets.
 #
