@@ -1,3 +1,4 @@
+2013-10-14 - 0.2.1
 * Add new libvirt::network definition (Igor Galić).
 * Move all current parameters to the params class.
 
