@@ -1,3 +1,4 @@
+2013-10-16 - 0.2.3
 * Fix for default sysconfig setting on RedHat.
 * Add listen_addr, tcp_auth and tls_auth parameters.
 
