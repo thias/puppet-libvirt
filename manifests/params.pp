@@ -9,7 +9,7 @@ class libvirt::params {
       $libvirt_package = "libvirt.${::architecture}"
       $libvirt_service = 'libvirtd'
       $virtinst_package = 'python-virtinst'
-      $sysconfig = true
+      $sysconfig = {}
     }
     'Debian': {
       $libvirt_package = 'libvirt-bin'

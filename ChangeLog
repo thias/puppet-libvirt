@@ -1,3 +1,5 @@
+* Fix for default sysconfig setting on RedHat.
+
 2013-10-16 - 0.2.2
 * Add sysconfig/libvirtd file management on RedHat osfamily.
 * Add tls and tcp related parameters.
