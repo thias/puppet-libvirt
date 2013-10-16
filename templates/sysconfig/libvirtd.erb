@@ -1,0 +1,42 @@
+# Override the default config file
+# NOTE: This setting is no longer honoured if using
+# systemd. Set '--config /etc/libvirt/libvirtd.conf'
+# in LIBVIRTD_ARGS instead.
+#LIBVIRTD_CONFIG=/etc/libvirt/libvirtd.conf
+<% if @sysconfig['LIBVIRTD_CONFIG'] -%>
+LIBVIRTD_CONFIG=<%= @sysconfig['LIBVIRTD_CONFIG'] %>
+<% end -%>
+
+# Listen for TCP/IP connections
+# NB. must setup TLS/SSL keys prior to using this
+#LIBVIRTD_ARGS="--listen"
+<% if @sysconfig['LIBVIRTD_ARGS'] -%>
+LIBVIRTD_ARGS=<%= @sysconfig['LIBVIRTD_ARGS'] %>
+<% end -%>
+
+# Override Kerberos service keytab for SASL/GSSAPI
+#KRB5_KTNAME=/etc/libvirt/krb5.tab
+<% if @sysconfig['KRB5_KTNAME'] -%>
+KRB5_KTNAME=<%= @sysconfig['KRB5_KTNAME'] %>
+<% end -%>
+
+# Override the QEMU/SDL default audio driver probing when
+# starting virtual machines using SDL graphics
+#
+# NB these have no effect for VMs using VNC, unless vnc_allow_host_audio
+# is enabled in /etc/libvirt/qemu.conf
+#QEMU_AUDIO_DRV=sdl
+<% if @sysconfig['QEMU_AUDIO_DRV'] -%>
+QEMU_AUDIO_DRV=<%= @sysconfig['QEMU_AUDIO_DRV'] %>
+<% end -%>
+#
+#SDL_AUDIODRIVER=pulse
+<% if @sysconfig['SDL_AUDIODRIVER'] -%>
+SDL_AUDIODRIVER=<%= @sysconfig['SDL_AUDIODRIVER'] %>
+<% end -%>
+
+# Override the maximum number of opened files
+#LIBVIRTD_NOFILES_LIMIT=2048
+<% if @sysconfig['LIBVIRTD_NOFILES_LIMIT'] -%>
+LIBVIRTD_NOFILES_LIMIT=<%= @sysconfig['LIBVIRTD_NOFILES_LIMIT'] %>
+<% end -%>

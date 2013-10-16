@@ -26,6 +26,7 @@ class libvirt (
   $libvirt_package    = $::libvirt::params::libvirt_package,
   $libvirt_service    = $::libvirt::params::libvirt_service,
   $virtinst_package   = $::libvirt::params::virtinst_package,
+  $sysconfig          = $::libvirt::params::sysconfig,
   # libvirtd.conf options
   $mdns_adv           = true,
   $unix_sock_group    = $::libvirt::params::unix_sock_group,
@@ -50,6 +51,9 @@ class libvirt (
   }
 
   file { '/etc/libvirt/libvirtd.conf':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('libvirt/libvirtd.conf.erb'),
     notify  => Service['libvirtd'],
     require => Package['libvirt'],
@@ -81,6 +85,17 @@ class libvirt (
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
+  }
+
+  # Optional changes to the sysconfig file (on RedHat)
+  if $sysconfig != false {
+    file { '/etc/sysconfig/libvirtd':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template("${module_name}/sysconfig/libvirtd.erb"),
+      notify  => Service['libvirtd'],
+    }
   }
 
 }

@@ -91,3 +91,16 @@ $networks = hiera('libvirt_networks', [])
 create_resources($networks, $your_defaults_for_a_network)
 ```
 
+On Red Hat Enterprise Linux, you might want to also manage changes to the
+`/etc/sysconfig/libvirtd` file. In this case, you pass the key/value pairs
+of the variables to set inside the `sysconfig` hash :
+
+```puppet
+class { 'libvirt':
+  sysconfig => {
+    'LIBVIRTD_ARGS'          => '--listen',
+    'LIBVIRTD_NOFILES_LIMIT' => '4096',
+  },
+}
+```
+
