@@ -97,7 +97,9 @@ of the variables to set inside the `sysconfig` hash :
 
 ```puppet
 class { 'libvirt':
-  sysconfig => {
+  listen_tls => false,
+  listen_tcp => true,
+  sysconfig  => {
     'LIBVIRTD_ARGS'          => '--listen',
     'LIBVIRTD_NOFILES_LIMIT' => '4096',
   },

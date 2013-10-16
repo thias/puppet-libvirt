@@ -20,6 +20,11 @@
 #
 # This is enabled by default, uncomment this to disable it
 #listen_tls = 0
+<% if @listen_tls == true -%>
+listen_tls = 1
+<% elsif @listen_tls == false -%>
+listen_tls = 0
+<% end -%>
 
 # Listen for unencrypted TCP connections on the public TCP/IP port.
 # NB, must pass the --listen flag to the libvirtd process for this to
@@ -31,6 +36,11 @@
 #
 # This is disabled by default, uncomment this to enable it.
 #listen_tcp = 1
+<% if @listen_tcp == true -%>
+listen_tcp = 1
+<% elsif @listen_tcp == false -%>
+listen_tcp = 0
+<% end -%>
 
 
 
@@ -38,11 +48,17 @@
 # This can be a port number, or service name
 #
 #tls_port = "16514"
+<% if @tls_port -%>
+tls_port = "<%= tls_port %>"
+<% end -%>
 
 # Override the port for accepting insecure TCP connections
 # This can be a port number, or service name
 #
 #tcp_port = "16509"
+<% if @tcp_port -%>
+tcp_port = "<%= tcp_port %>"
+<% end -%>
 
 
 # Override the default configuration which binds to all network

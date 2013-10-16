@@ -28,7 +28,11 @@ class libvirt (
   $virtinst_package   = $::libvirt::params::virtinst_package,
   $sysconfig          = $::libvirt::params::sysconfig,
   # libvirtd.conf options
-  $mdns_adv           = true,
+  $listen_tls         = undef,
+  $listen_tcp         = undef,
+  $tls_port           = undef,
+  $tcp_port           = undef,
+  $mdns_adv           = undef,
   $unix_sock_group    = $::libvirt::params::unix_sock_group,
   $unix_sock_ro_perms = $::libvirt::params::unix_sock_ro_perms,
   $auth_unix_ro       = $::libvirt::params::auth_unix_ro,

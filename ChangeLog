@@ -1,4 +1,5 @@
 * Add sysconfig/libvirtd file management on RedHat osfamily.
+* Add tls and tcp related parameters.
 
 2013-10-14 - 0.2.1
 * Add new libvirt::network definition (Igor Galić).
