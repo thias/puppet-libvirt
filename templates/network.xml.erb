@@ -13,7 +13,7 @@
   <%-  end -%>
   <%-end -%>
   <%- if @bridge -%>
-  <bridge name='<%= @bridge -%>'<%- if @forward_mode and @forward_mode != 'bridge' -%> in  stp='on' delay='0'<%-end-%>/>
+  <bridge name='<%= @bridge -%>'<%- if @forward_mode and @forward_mode != 'bridge' -%> stp='on' delay='0'<%-end-%>/>
   <%- end -%>
   <%-if @ip -%>
   <%-  @ip.each do |ip| -%>
