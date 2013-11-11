@@ -103,4 +103,45 @@ describe 'libvirt::network' do
     end
   end
 
+  context 'autostarted dual-stack' do
+    it 'should create an autostarted network with NATed IPv4 network and an IPv6 address' do
+      puppet_apply(%{
+         class { 'libvirt': }
+         $dhcp = {
+           'start' => '192.168.222.2',
+           'end'   => '192.168.222.254',
+         }
+         $ip = {
+           'address' => '192.168.222.1',
+           'netmask' => '255.255.255.0',
+         }
+         $ipv6 = {
+           address => '2001:db8:ca2:2::1',
+           prefix  => '64',
+         }
+         libvirt::network { 'dual-stack':
+           autostart    => true,
+           ensure       => 'running',
+           forward_mode => 'nat',
+           forward_dev  => 'virbr2',
+           bridge       => 'virbr2',
+           ip           => [ $ip],
+           ipv6         => [ $ipv6 ],
+         }
+      }) { |r| [0,2].should include r.exit_code}
+    end
+
+    it 'respond to ping on IP 192.168.222.1 (for interface virbr2)' do
+      shell('ping -c1 -q -I virbr2 192.168.222.1') do |r|
+        r.exit_code.should == 0
+      end
+    end
+
+    it 'respond to ping6 on IP 2001:db8:ca2:2::1 (for interface virbr2)' do
+      shell('ping6 -c1 -q -I virbr2 2001:db8:ca2:2::1') do |r|
+        r.exit_code.should == 0
+      end
+    end
+  end
+
 end
