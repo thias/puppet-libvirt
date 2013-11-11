@@ -40,10 +40,10 @@ RSpec.configure do |c|
     # We only want one source of truth for deps, so we read the Modulefile:
     File.open(File.join(proj_root, 'Modulefile')).each do |line|
       if line =~ /^\bdependency\b/
-        m = line.split(/'|"/)[1]
-        v = ''
-        v += ( ' --version ' + line.split(/\s+/)[3].chop ) if line.split(/\s+/)[3]
-        shell("puppet module install #{m}#{v}")
+        m =  line.split("'")[1]
+        cmd = "puppet module install #{m}"
+        cmd += " --version #{line.split(/\s+/)[3].chop}" if line.split(/\s+/)[3]
+        shell(cmd)
       end
     end
   end
