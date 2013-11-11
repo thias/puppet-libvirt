@@ -69,6 +69,24 @@ libvirt::network { 'pxe':
 }
 ```
 
+We also support IPv6: It has the same sematics as ip:
+
+```puppet
+# $ip = same as above
+
+$ipv6 = {
+  address => '2001:db8:ca2:2::1',
+  prefix  => '64',
+}
+
+libvirt::network { 'dual-stack':
+  forward_mode => 'nat',
+  forward_dev  => 'virbr0',
+	ip           => [ $ip ],
+  ipv6         => [ $ipv6 ],
+}
+```
+
 While this might look a little convoluted in puppet code, this gives you the ability to specify networks in hiera, and then use `create_resources()` to  generate them:
 
 ```yaml

@@ -15,13 +15,14 @@
 #    The interface to forward, useful in bridge and route mode
 #  $forward_interfaces
 #    An array of interfaces to forwad
-#  $ip array hashes with
+#  $ip and/or $ipv6 array hashes with
 #    address
 #    netmask (or alterntively prefix)
 #    dhcp This is another hash that consists of
 #      start - start of the range
 #      end - end of the range
 #      host - an array of hosts
+#  Note: The following options are not supported on IPv6 networks
 #    bootp_file - A file to serve for servers booting from PXE
 #    bootp_server - Which server that file is served from
 #  $mac - A MAC for this network, if none is defined, libvirt will chose one for you
@@ -53,6 +54,19 @@
 #   forward_interfaces => [ 'eth0', ],
 # }
 #
+# $ipv6 = {
+#   address => '2001:db8:ca2:2::1',
+#   prefix  => '64',
+# }
+#
+# libvirt::network { 'dual-stack'
+#   ensure       => 'enabled',
+#   autostart    => true,
+#   forward_mode => 'nat',
+#   ip           => [ $pxe_ip ],
+#   ipv6         => [ $ipv6 ],
+# }
+#
 define libvirt::network (
   $ensure             = 'present',
   $autostart          = false,
@@ -61,6 +75,7 @@ define libvirt::network (
   $forward_dev        = undef,
   $forward_interfaces = [],
   $ip                 = undef,
+  $ipv6               = undef,
   $mac                = undef,
 ) {
   validate_bool ($autostart)
