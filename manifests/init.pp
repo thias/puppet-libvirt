@@ -43,9 +43,9 @@ class libvirt (
   $auth_unix_rw       = $::libvirt::params::auth_unix_rw,
   $unix_sock_dir      = $::libvirt::params::unix_sock_dir,
   # qemu.conf options
-  $vnc_listen         = undef,
-  $vnc_sasl           = undef,
-  $vnc_tls            = undef,
+  $qemu_vnc_listen    = undef,
+  $qemu_vnc_sasl      = undef,
+  $qemu_vnc_tls       = undef,
 
 ) inherits ::libvirt::params {
 

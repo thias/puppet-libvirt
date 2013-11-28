@@ -10,8 +10,8 @@
 # verification when allowing public access
 #
 # vnc_listen = "0.0.0.0"
-<% if @vnc_listen -%>
-vnc_listen = "<%= @vnc_listen %>"
+<% if @qemu_vnc_listen -%>
+vnc_listen = "<%= @qemu_vnc_listen %>"
 <% end -%>
 
 # Enable this option to have VNC served over an automatically created
@@ -33,9 +33,9 @@ vnc_listen = "<%= @vnc_listen %>"
 # before enabling this.
 #
 # vnc_tls = 1
-<% if @vnc_tls == true -%>
+<% if @qemu_vnc_tls == true -%>
 vnc_tls = 1
-<% elsif @vnc_tls == false -%>
+<% elsif @qemu_vnc_tls == false -%>
 vnc_tls = 0
 <% end -%>
 
@@ -85,9 +85,9 @@ vnc_tls = 0
 # the desired SASL plugin (eg, GSSPI for Kerberos)
 #
 # vnc_sasl = 1
-<% if @vnc_sasl == true -%>
+<% if @qemu_vnc_sasl == true -%>
 vnc_sasl = 1
-<% elsif @vnc_sasl == false -%>
+<% elsif @qemu_vnc_sasl == false -%>
 vnc_sasl = 0
 <% end -%>
 
