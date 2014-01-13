@@ -47,7 +47,6 @@ class libvirt (
   $qemu_vnc_listen    = undef,
   $qemu_vnc_sasl      = undef,
   $qemu_vnc_tls       = undef,
-
 ) inherits ::libvirt::params {
 
   package { 'libvirt':
@@ -113,7 +112,7 @@ class libvirt (
     }
   }
 
-  # Optional changes to the /etc/default file (on debian)
+  # Optional changes to the /etc/default file (on Debian)
   if $default != false {
     file { '/etc/default/libvirt-bin':
       owner   => 'root',
