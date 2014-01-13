@@ -6,19 +6,20 @@ Libvirt module. Useful on minimal Red Hat Enterprise Linux and Debian/Ubuntu
 installations which need to be configured as KVM virtualization hosts.
 
 * `libvirt` : Main class to install, enable and configure libvirt.
+* `libvirt::network` : Definition to manage libvirt networks.
 
 ## Examples
 
 Use all of the module's defaults :
 
 ```puppet
-include libvirt
+include '::libvirt'
 ```
 
 Typical KVM/qemu host for virtualization :
 
 ```puppet
-class { 'libvirt':
+class { '::libvirt':
   mdns_adv => false
 }
 ```
@@ -26,7 +27,7 @@ class { 'libvirt':
 Change even more defaults :
 
 ```puppet
-class { 'libvirt':
+class { '::libvirt':
   defaultnetwork     => true,
   virtinst           => false,
   unix_sock_group    => 'wheel',
@@ -37,7 +38,7 @@ class { 'libvirt':
 The module also allows the user to customize qemu parameters :
 
 ```puppet
-class { 'libvirt':
+class { '::libvirt':
   qemu_vnc_listen => "0.0.0.0",
   qemu_vnc_sasl   => true,
   qemu_vnc_tls    => false,
@@ -47,28 +48,28 @@ class { 'libvirt':
 Configure Kerberos authentication:
 
 ```puppet
-class { 'libvirt':
- listen_tls                => false,
- listen_tcp                => true,
- auth_tcp                  => 'sasl',
- sysconfig                 => {
-   'LIBVIRTD_ARGS' => '--listen',
- },
- sasl2_libvirt_mech_list   => 'gssapi',
- sasl2_libvirt_keytab      => '/etc/libvirt/krb5.tab',
- qemu_vnc_listen           => "0.0.0.0",
- qemu_vnc_sasl             => true,
- qemu_vnc_tls              => false,
- sasl2_qemu_mech_list      => 'gssapi',
- sasl2_qemu_keytab         => '/etc/qemu/krb5.tab',
- sasl2_qemu_auxprop_plugin => 'sasldb',
+class { '::libvirt':
+  listen_tls                => false,
+  listen_tcp                => true,
+  auth_tcp                  => 'sasl',
+  sysconfig                 => {
+    'LIBVIRTD_ARGS' => '--listen',
+  },
+  sasl2_libvirt_mech_list   => 'gssapi',
+  sasl2_libvirt_keytab      => '/etc/libvirt/krb5.tab',
+  qemu_vnc_listen           => "0.0.0.0",
+  qemu_vnc_sasl             => true,
+  qemu_vnc_tls              => false,
+  sasl2_qemu_mech_list      => 'gssapi',
+  sasl2_qemu_keytab         => '/etc/qemu/krb5.tab',
+  sasl2_qemu_auxprop_plugin => 'sasldb',
 }
 ```
 
 Replace the default network with a PXE boot one :
 
 ```puppet
-class { 'libvirt':
+class { '::libvirt':
   defaultnetwork => false, # This is the default
 }
 
@@ -145,7 +146,7 @@ On Red Hat Enterprise Linux, you might want to also manage changes to the
 of the variables to set inside the `sysconfig` hash :
 
 ```puppet
-class { 'libvirt':
+class { '::libvirt':
   listen_tls => false,
   listen_tcp => true,
   sysconfig  => {
