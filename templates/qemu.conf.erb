@@ -317,6 +317,11 @@ vnc_sasl = 0
 # its arguments) appear in process listings.
 #
 # set_process_name = 1
+<% if @qemu_set_process_name == true -%>
+set_process_name = 1
+<% elsif @qemu_set_process_name == false -%>
+set_process_name = 0
+<% end -%>
 
 
 # If max_processes is set to a positive integer, libvirt will use
