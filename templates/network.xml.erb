@@ -17,7 +17,7 @@
   <%- end -%>
   <%-if @ip -%>
   <%-  @ip.each do |ip| -%>
-  <ip<%-if ip['address']-%> address='<%=ip['address']-%>'<%-end-%><%-if ip['netmask']-%> netmask='<%=ip['netmask']-%>'<%-end-%><%-if ip['prefix']-%> prefix='<%=ip['prefix']-%>'<%-end-%>>
+  <ip<%-if ip['address']-%> address='<%=ip['address']-%>'<%-end-%><%-if ip['netmask']-%> netmask='<%=ip['netmask']-%>'<%-end-%><%-if ip['prefix']-%> prefix='<%=ip['prefix']-%>'<%-end-%><%- unless ip['dhcp'] %>/<%- end -%>>
     <%- if ip['dhcp'] -%>
     <%- dhcp = ip['dhcp'] -%>
     <dhcp>
@@ -28,8 +28,22 @@
       <bootp file='<%= dhcp['bootp_file'] -%>'<%-if dhcp['bootp_server']-%> server='<%=dhcp['bootp_server']-%>'<%-end-%>/>
       <%-end-%>
     </dhcp>
-    <%- end-%>
   </ip>
+    <%- end-%>
+  <%-  end-%>
+  <%-end-%>
+  <%-if @ipv6 -%>
+  <%-  @ipv6.each do |ip| -%>
+  <ip family='ipv6'<%-if ip['address']-%> address='<%=ip['address']-%>'<%-end-%><%-if ip['netmask']-%> netmask='<%=ip['netmask']-%>'<%-end-%><%-if ip['prefix']-%> prefix='<%=ip['prefix']-%>'<%-end-%><%- unless ip['dhcp'] %>/<%- end -%>>
+    <%- if ip['dhcp'] -%>
+    <%- dhcp = ip['dhcp'] -%>
+    <dhcp>
+      <%-if dhcp['start'] and dhcp['end']-%>
+      <range start='<%=dhcp['start']-%>' end='<%=dhcp['end']-%>'/>
+      <%-end-%>
+    </dhcp>
+  </ip>
+    <%- end-%>
   <%-  end-%>
   <%-end-%>
 </network>

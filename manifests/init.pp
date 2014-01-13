@@ -25,9 +25,11 @@ class libvirt (
   $networks_defaults  = {},
   $virtinst           = true,
   $qemu               = true,
+  $radvd              = false,
   $libvirt_package    = $::libvirt::params::libvirt_package,
   $libvirt_service    = $::libvirt::params::libvirt_service,
   $virtinst_package   = $::libvirt::params::virtinst_package,
+  $radvd_package      = $::libvirt::params::radvd_package,
   $sysconfig          = $::libvirt::params::sysconfig,
   $default            = $::libvirt::params::default,  
   # libvirtd.conf options
@@ -102,6 +104,9 @@ class libvirt (
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
+  }
+  if $radvd {
+    package { $radvd_package: ensure => installed }
   }
 
   # Optional changes to the sysconfig file (on RedHat)
