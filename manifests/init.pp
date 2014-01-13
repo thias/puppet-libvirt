@@ -27,6 +27,7 @@ class libvirt (
   $libvirt_service    = $::libvirt::params::libvirt_service,
   $virtinst_package   = $::libvirt::params::virtinst_package,
   $sysconfig          = $::libvirt::params::sysconfig,
+  $default            = $::libvirt::params::default,  
   # libvirtd.conf options
   $listen_tls         = undef,
   $listen_tcp         = undef,
@@ -108,6 +109,17 @@ class libvirt (
       group   => 'root',
       mode    => '0644',
       content => template("${module_name}/sysconfig/libvirtd.erb"),
+      notify  => Service['libvirtd'],
+    }
+  }
+
+  # Optional changes to the /etc/default file (on debian)
+  if $default != false {
+    file { '/etc/default/libvirt-bin':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template("${module_name}/default/libvirt-bin.erb"),
       notify  => Service['libvirtd'],
     }
   }
