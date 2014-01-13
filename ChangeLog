@@ -1,3 +1,8 @@
+* Add /etc/default/libvirt-bin generation for debian systems (#15, @msimonin).
+* Add type to manage storage pools (#16, @msimonin).
+* Fix tests (#17, @igalic).
+* Add initial configuration of qemu.conf (#18, @luisfdez).
+
 2013-10-16 - 0.2.3
 * Fix for default sysconfig setting on RedHat.
 * Add listen_addr, tcp_auth and tls_auth parameters.
