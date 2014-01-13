@@ -120,7 +120,7 @@ class { 'libvirt':
 
 ### Libvirt Storage Pools
 
-#### Puppet Resource 
+#### Puppet Resource
 
 Query all current pools: `$ puppet resource libvirt_pool`
 
@@ -130,17 +130,17 @@ Query all current pools: `$ puppet resource libvirt_pool`
 
 ```puppet
 libvirt_pool { 'mypool' :
-  ensure  => present,
-  type    => 'dir',
+  ensure   => present,
+  type     => 'dir',
   activate => false,
-  target  => '/tmp/pool-dir',
+  target   => '/tmp/pool-dir',
 }
 ```
 The above will *define*, *build* but not *activate* the pool.
 
-By default a pool is *activated* ( same as `activate => true`)
+By default a pool is *activated* ( same as `activate => true`).
 
-By default a pool is *not autostarted* (same as `autostart => false`)
+By default a pool is *not autostarted* (same as `autostart => false`).
 
 
 
@@ -151,13 +151,13 @@ libvirt_pool { 'lvm-pool' :
   ensure     => present,
   type       => 'logical',
   autostart  => true,
-  sourcedev  => [ '/dev/sdb1', '/dev/sdc1']
+  sourcedev  => [ '/dev/sdb1', '/dev/sdc1' ],
   sourcename => 'vg',
   target     => '/dev/vg'
 }
 ```
 
-* Remove default pool : 
+* Remove the default pool :
 
 ```puppet
 libvirt_pool { 'default' :
