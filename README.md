@@ -126,70 +126,41 @@ Query all current pools: `$ puppet resource libvirt_pool`
 
 #### Examples
 
-Define a new directory pool (calls `virsh pool-define-as`) :
+* Create a new directory pool  :
 
 ```puppet
 libvirt_pool { 'mypool' :
   ensure  => present,
   type    => 'dir',
+  activate => false,
   target  => '/tmp/pool-dir',
 }
 ```
+The above will *define*, *build* but not *activate* the pool.
 
-Build a new directory pool (calls `virsh pool-define-as` and
-`virsh pool-build`) :
-```puppet
-libvirt_pool { 'mypool' :
-  ensure  => build,
-  type    => 'dir',
-  target  => '/tmp/pool-dir',
-}
-```
+By default a pool is *activated* ( same as `activate => true`)
 
-Start a new directory pool (calls `virsh pool-define-as` and `virsh pool-build`
-and `virsh pool-start`) :
-```puppet
-libvirt_pool { 'mypool' :
-  ensure  => active,
-  type    => 'dir',
-  target  => '/tmp/pool-dir',
-}
-```
+By default a pool is *not autostarted* (same as `autostart => false`)
 
-Start a new directory pool and set the autostart flag (calls
-`virsh pool-define-as` and `virsh pool-build` and `virsh pool-start` and
-`virsh pool-autostart`) :
-```puppet
-libvirt_pool { 'mypool' :
-  ensure    => active,
-  autostart => true,
-  type      => 'dir',
-  target    => '/tmp/pool-dir',
-}
-```
 
-Create a `netfs` pool (default format to `nfs`) :
+
+* Create a `logical` pool (`lvm`) and set the autostart flag :
 
 ```puppet
-libvirt_pool { 'gl-built' :
-  ensure       => present,
-  type         => 'netfs',
-  sourceformat => 'glusterfs',
-  sourcehost   => 'mafalda',
-  sourcepath   => '/tmp/gluster-shared',
-  target       => '/tmp/gluster-present',
-}
-```
-
-Create a `logical` pool (`lvm`) :
-
-```puppet
-libvirt_pool { 'lvm-active' :
-  ensure     => active,
+libvirt_pool { 'lvm-pool' :
+  ensure     => present,
   type       => 'logical',
+  autostart  => true,
   sourcedev  => [ '/dev/sdb1', '/dev/sdc1']
   sourcename => 'vg',
   target     => '/dev/vg'
 }
 ```
 
+* Remove default pool : 
+
+```puppet
+libvirt_pool { 'default' :
+  ensure => absent,
+}
+```
