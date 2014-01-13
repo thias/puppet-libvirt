@@ -103,7 +103,7 @@ $ipv6 = {
 libvirt::network { 'dual-stack':
   forward_mode => 'nat',
   forward_dev  => 'virbr0',
-	ip           => [ $ip ],
+  ip           => [ $ip ],
   ipv6         => [ $ipv6 ],
 }
 ```
