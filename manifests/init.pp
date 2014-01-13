@@ -20,38 +20,44 @@
 #  include libvirt
 #
 class libvirt (
-  $defaultnetwork     = false,
-  $networks           = {},
-  $networks_defaults  = {},
-  $virtinst           = true,
-  $qemu               = true,
-  $radvd              = false,
-  $libvirt_package    = $::libvirt::params::libvirt_package,
-  $libvirt_service    = $::libvirt::params::libvirt_service,
-  $virtinst_package   = $::libvirt::params::virtinst_package,
-  $radvd_package      = $::libvirt::params::radvd_package,
-  $sysconfig          = $::libvirt::params::sysconfig,
-  $default            = $::libvirt::params::default,  
+  $defaultnetwork            = false,
+  $networks                  = {},
+  $networks_defaults         = {},
+  $virtinst                  = true,
+  $qemu                      = true,
+  $radvd                     = false,
+  $libvirt_package           = $::libvirt::params::libvirt_package,
+  $libvirt_service           = $::libvirt::params::libvirt_service,
+  $virtinst_package          = $::libvirt::params::virtinst_package,
+  $radvd_package             = $::libvirt::params::radvd_package,
+  $sysconfig                 = $::libvirt::params::sysconfig,
+  $default                   = $::libvirt::params::default,
   # libvirtd.conf options
-  $listen_tls         = undef,
-  $listen_tcp         = undef,
-  $tls_port           = undef,
-  $tcp_port           = undef,
-  $listen_addr        = undef,
-  $mdns_adv           = undef,
-  $auth_tcp           = undef,
-  $auth_tls           = undef,
-  $unix_sock_group    = $::libvirt::params::unix_sock_group,
-  $unix_sock_ro_perms = $::libvirt::params::unix_sock_ro_perms,
-  $auth_unix_ro       = $::libvirt::params::auth_unix_ro,
-  $unix_sock_rw_perms = $::libvirt::params::unix_sock_rw_perms,
-  $auth_unix_rw       = $::libvirt::params::auth_unix_rw,
-  $unix_sock_dir      = $::libvirt::params::unix_sock_dir,
+  $listen_tls                = undef,
+  $listen_tcp                = undef,
+  $tls_port                  = undef,
+  $tcp_port                  = undef,
+  $listen_addr               = undef,
+  $mdns_adv                  = undef,
+  $auth_tcp                  = undef,
+  $auth_tls                  = undef,
+  $unix_sock_group           = $::libvirt::params::unix_sock_group,
+  $unix_sock_ro_perms        = $::libvirt::params::unix_sock_ro_perms,
+  $auth_unix_ro              = $::libvirt::params::auth_unix_ro,
+  $unix_sock_rw_perms        = $::libvirt::params::unix_sock_rw_perms,
+  $auth_unix_rw              = $::libvirt::params::auth_unix_rw,
+  $unix_sock_dir             = $::libvirt::params::unix_sock_dir,
   # qemu.conf options
-  $qemu_vnc_listen       = undef,
-  $qemu_vnc_sasl         = undef,
-  $qemu_vnc_tls          = undef,
-  $qemu_set_process_name = undef,
+  $qemu_vnc_listen           = undef,
+  $qemu_vnc_sasl             = undef,
+  $qemu_vnc_tls              = undef,
+  $qemu_set_process_name     = undef,
+  # sasl2 options
+  $sasl2_libvirt_mech_list   = undef,
+  $sasl2_libvirt_keytab      = undef
+  $sasl2_qemu_mech_list      = undef,
+  $sasl2_qemu_keytab         = undef,
+  $sasl2_qemu_auxprop_plugin = undef,
 ) inherits ::libvirt::params {
 
   package { 'libvirt':
@@ -85,6 +91,15 @@ class libvirt (
     require => Package['libvirt'],
   }
 
+  file { '/etc/sasl2/libvirt.conf':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('libvirt/sasl2/libvirt.conf.erb'),
+    notify  => Service['libvirtd'],
+    require => Package['libvirt'],
+  }
+
   # The default network, automatically configured... disable it by default
   $def_net = $defaultnetwork? {
     true    => 'enabled',
@@ -104,6 +119,14 @@ class libvirt (
   }
   if $qemu {
     package { 'qemu-kvm': ensure => installed }
+    file { '/etc/sasl2/qemu-kvm.conf':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('libvirt/sasl2/qemu-kvm.conf.erb'),
+      notify  => Service['libvirtd'],
+      require => Package['qemu-kvm'],
+    }
   }
   if $radvd {
     package { $radvd_package: ensure => installed }
@@ -131,7 +154,7 @@ class libvirt (
     }
   }
 
-  # Create Optional networks:
+  # Create Optional networks
   create_resources(libvirt::network, $networks, $networks_defaults)
 
 }

@@ -44,6 +44,27 @@ class { 'libvirt':
 }
 ```
 
+Configure Kerberos authentication:
+
+```puppet
+class { 'libvirt':
+ listen_tls                => false,
+ listen_tcp                => true,
+ auth_tcp                  => 'sasl',
+ sysconfig                 => {
+   'LIBVIRTD_ARGS' => '--listen',
+ },
+ sasl2_libvirt_mech_list   => 'gssapi',
+ sasl2_libvirt_keytab      => '/etc/libvirt/krb5.tab',
+ qemu_vnc_listen           => "0.0.0.0",
+ qemu_vnc_sasl             => true,
+ qemu_vnc_tls              => false,
+ sasl2_qemu_mech_list      => 'gssapi',
+ sasl2_qemu_keytab         => '/etc/qemu/krb5.tab',
+ sasl2_qemu_auxprop_plugin => 'sasldb',
+}
+```
+
 Replace the default network with a PXE boot one :
 
 ```puppet
