@@ -54,7 +54,7 @@ class libvirt (
   $qemu_set_process_name     = undef,
   # sasl2 options
   $sasl2_libvirt_mech_list   = undef,
-  $sasl2_libvirt_keytab      = undef
+  $sasl2_libvirt_keytab      = undef,
   $sasl2_qemu_mech_list      = undef,
   $sasl2_qemu_keytab         = undef,
   $sasl2_qemu_auxprop_plugin = undef,
