@@ -1,3 +1,6 @@
+2014-01-31 - 0.3.1
+* Fixed typo in init.pp (#23, @gigawhat).
+
 2014-01-28 - 0.3.0
 * Add /etc/default/libvirt-bin generation for debian systems (#15, @msimonin).
 * Add type to manage storage pools (#16, @msimonin).
