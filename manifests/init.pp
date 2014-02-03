@@ -125,7 +125,7 @@ class libvirt (
       mode    => '0644',
       content => template('libvirt/sasl2/qemu-kvm.conf.erb'),
       notify  => Service['libvirtd'],
-      require => Package['qemu-kvm'],
+      require => [Package['libvirt'], Package['qemu-kvm']]
     }
   }
   if $radvd {
