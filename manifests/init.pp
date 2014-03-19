@@ -31,7 +31,7 @@ class libvirt (
     $virtinst_package          = $::libvirt::params::virtinst_package,
     $radvd_package             = $::libvirt::params::radvd_package,
     $sysconfig                 = $::libvirt::params::sysconfig,
-    $default                   = $::libvirt::params::default,
+    $deb_default               = $::libvirt::params::ddeb_efault,
     # libvirtd.conf options
     $listen_tls                = undef,
     $listen_tcp                = undef,
@@ -146,7 +146,7 @@ class libvirt (
     }
 
     # Optional changes to the /etc/default file (on Debian)
-    if $default != false {
+    if $deb_default != false {
         file { '/etc/default/libvirt-bin':
             owner   => 'root',
             group   => 'root',
