@@ -19,7 +19,7 @@ class libvirt::params {
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
-      $default = {}
+      $deb_default = {}
       # UNIX socket
       $unix_sock_group = 'libvirtd'
       $auth_unix_ro = 'none'
