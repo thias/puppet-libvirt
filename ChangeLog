@@ -1,3 +1,6 @@
+* Bugfix for debian defaults with Puppet 2.7 (#28, @darktim).
+* Add qemu_user and qemu_group parameters (#28, @darktim).
+
 2014-01-31 - 0.3.1
 * Fixed typo in init.pp (#23, @gigawhat).
 
