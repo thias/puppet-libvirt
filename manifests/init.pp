@@ -31,7 +31,7 @@ class libvirt (
   $virtinst_package          = $::libvirt::params::virtinst_package,
   $radvd_package             = $::libvirt::params::radvd_package,
   $sysconfig                 = $::libvirt::params::sysconfig,
-  $deb_default               = $::libvirt::params::deb_efault,
+  $deb_default               = $::libvirt::params::deb_default,
   # libvirtd.conf options
   $listen_tls                = undef,
   $listen_tcp                = undef,
