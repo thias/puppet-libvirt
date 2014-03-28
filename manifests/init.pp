@@ -31,7 +31,7 @@ class libvirt (
   $virtinst_package          = $::libvirt::params::virtinst_package,
   $radvd_package             = $::libvirt::params::radvd_package,
   $sysconfig                 = $::libvirt::params::sysconfig,
-  $default                   = $::libvirt::params::default,
+  $deb_default               = $::libvirt::params::deb_default,
   # libvirtd.conf options
   $listen_tls                = undef,
   $listen_tcp                = undef,
@@ -52,6 +52,8 @@ class libvirt (
   $qemu_vnc_sasl             = undef,
   $qemu_vnc_tls              = undef,
   $qemu_set_process_name     = undef,
+  $qemu_user                 = undef,
+  $qemu_group                = undef,
   # sasl2 options
   $sasl2_libvirt_mech_list   = undef,
   $sasl2_libvirt_keytab      = undef,
@@ -144,7 +146,7 @@ class libvirt (
   }
 
   # Optional changes to the /etc/default file (on Debian)
-  if $default != false {
+  if $deb_default != false {
     file { '/etc/default/libvirt-bin':
       owner   => 'root',
       group   => 'root',

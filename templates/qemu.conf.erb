@@ -160,9 +160,15 @@ vnc_sasl = 0
 
 # The user ID for QEMU processes run by the system instance.
 #user = "root"
+<% if @qemu_user -%>
+user = "<%= @qemu_user %>"
+<% end -%>
 
 # The group ID for QEMU processes run by the system instance.
 #group = "root"
+<% if @qemu_group -%>
+group = "<%= @qemu_group %>"
+<% end -%>
 
 # Whether libvirt should dynamically change file ownership
 # to match the configured user/group above. Defaults to 1.
