@@ -15,7 +15,7 @@ class libvirt::params {
       }
       $radvd_package = 'radvd'
       $sysconfig = {}
-      $default = false
+      $deb_default = false
     }
     'Debian': {
       $libvirt_package = 'libvirt-bin'
@@ -36,6 +36,7 @@ class libvirt::params {
       $virtinst_package = 'python-virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
+      $deb_default = false
     }
   }
 
