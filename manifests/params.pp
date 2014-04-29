@@ -8,7 +8,11 @@ class libvirt::params {
     'RedHat': {
       $libvirt_package = "libvirt.${::architecture}"
       $libvirt_service = 'libvirtd'
-      $virtinst_package = 'python-virtinst'
+      if $::operatingsystemmajrelease >= 7 {
+        $virtinst_package = 'virt-install'
+      } else {
+        $virtinst_package = 'python-virtinst'
+      }
       $radvd_package = 'radvd'
       $sysconfig = {}
       $default = false
