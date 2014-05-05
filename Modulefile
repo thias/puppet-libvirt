@@ -6,4 +6,4 @@ license 'Apache 2.0'
 summary 'Libvirt virtualization API and capabilities'
 description "Install, configure and enable libvirt."
 project_page 'https://github.com/thias/puppet-libvirt'
-dependency 'puppetlabs/stdlib'
+dependency 'puppetlabs/stdlib', '>= 2.0.0'
