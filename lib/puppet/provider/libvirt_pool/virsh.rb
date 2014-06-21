@@ -27,8 +27,8 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def status
     list = virsh '-q', 'pool-list', '--all'
-    list.strip.split(/\n/)[0..-1].detect do |line|  
-      fields = line.split(/ +/)
+    list.split(/\n/)[0..-1].detect do |line|  
+      fields = line.strip.split(/ +/)
       if (fields[0].match(/^#{resource[:name]}$/))
         return :present
       end
