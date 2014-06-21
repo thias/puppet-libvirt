@@ -11,8 +11,8 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     pools = []
     hash = {}
     list = virsh '-q', 'pool-list', '--all'
-    list.strip.split(/\n/)[0..-1].map do |line|
-      values = line.split(/ +/)
+    list.split(/\n/)[0..-1].map do |line|
+      values = line.strip.split(/ +/)
       hash = { 
         :name      => values[0],
         :active    => values[1].match(/^act/)? :true : :false,
