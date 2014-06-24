@@ -1,8 +1,6 @@
 require 'rexml/document'
 require 'tempfile'
 
-include REXML
-
 Puppet::Type.type(:libvirt_network).provide(:virsh) do
 
   commands :virsh => 'virsh' 
