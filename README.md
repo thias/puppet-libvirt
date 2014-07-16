@@ -172,13 +172,13 @@ Query all current pools: `$ puppet resource libvirt_pool`
 libvirt_pool { 'mypool' :
   ensure   => present,
   type     => 'dir',
-  activate => false,
+  active   => false,
   target   => '/tmp/pool-dir',
 }
 ```
 The above will *define*, *build* but not *activate* the pool.
 
-By default a pool is *activated* ( same as `activate => true`).
+By default a pool is *activated* ( same as `active => true`).
 
 By default a pool is *not autostarted* (same as `autostart => false`).
 
