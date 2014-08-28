@@ -14,6 +14,7 @@ class libvirt::params {
         $virtinst_package = 'python-virtinst'
       }
       $radvd_package = 'radvd'
+      $python_package = 'libvirt-python'
       $sysconfig = {}
       $deb_default = false
     }
@@ -22,6 +23,7 @@ class libvirt::params {
       $libvirt_service = 'libvirt-bin'
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
+      $python_package = 'python-libvirt'
       $sysconfig = false
       $deb_default = {}
       # UNIX socket
@@ -35,6 +37,7 @@ class libvirt::params {
       $libvirt_service = 'libvirtd'
       $virtinst_package = 'python-virtinst'
       $radvd_package = 'radvd'
+      $python_package = 'python-libvirt'
       $sysconfig = false
       $deb_default = false
     }
