@@ -5,30 +5,28 @@ include REXML
 
 Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
-  commands :virsh => 'virsh' 
+  commands :virsh => 'virsh'
+  def virshq(*args)
+    virsh('-q', *args)
+  end
 
   def self.instances
-    pools = []
-    hash = {}
-    list = virsh '-q', 'pool-list', '--all'
+    list = virshq('pool-list', '--all')
     list.split(/\n/)[0..-1].map do |line|
-      values = line.split(/ +/)
-      hash = { 
+      values = line.strip.split(/ +/)
+      new(
         :name      => values[0],
         :active    => values[1].match(/^act/)? :true : :false,
         :autostart => values[2].match(/no/) ? :false : :true,
         :provider  => self.name
-      }
-      pools << new(hash)
-      hash = {}
+      )
     end
-    return pools
   end
 
   def status
-    list = virsh '-q', 'pool-list', '--all'
-    list.split(/\n/)[0..-1].detect do |line|  
-      fields = line.split(/ +/)
+    list = virshq('pool-list', '--all')
+    list.split(/\n/)[0..-1].detect do |line|
+      fields = line.strip.split(/ +/)
       if (fields[0].match(/^#{resource[:name]}$/))
         return :present
       end
@@ -49,8 +47,8 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   def create
     defined = self.definePool
     if !defined
-      # for some reason the pool has not been defined 
-      # malformed xml 
+      # for some reason the pool has not been defined
+      # malformed xml
       # or failed tmpfile creationa
       # or ?
       raise Puppet::Error.new("Unable to define the pool")
@@ -80,7 +78,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
       xml = buildPoolXML resource
       tmpFile.write(xml)
       tmpFile.rewind
-      virsh 'pool-define', tmpFile.path
+      virsh('pool-define', tmpFile.path)
       result = true
     ensure
       tmpFile.close
@@ -91,10 +89,10 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def buildPool
     begin
-      virsh 'pool-build', '--pool', resource[:name]
+      virsh('pool-build', '--pool', resource[:name])
     rescue
       # Unable to build the pool maybe because
-      # it is already defined (it this case we should consider 
+      # it is already defined (it this case we should consider
       # to continue execution)
       # or there is permission issue on the fs
       # or ?
@@ -106,15 +104,15 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def destroyPool
     begin
-      virsh 'pool-destroy', resource[:name]
+      virsh('pool-destroy', resource[:name])
     rescue Puppet::ExecutionFailure => e
       notice(e.message)
     end
-    virsh 'pool-undefine', resource[:name]
+    virsh('pool-undefine', resource[:name])
   end
 
   def active
-    @property_hash[:active] || :false 
+    @property_hash[:active] || :false
   end
 
   def active=(active)
@@ -148,13 +146,10 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   def buildPoolXML(resource)
     root = Document.new
-    # pool
     pool = root.add_element 'pool', {'type' => resource[:type]}
-    # name
     name = pool.add_element 'name'
     name.add_text resource[:name]
 
-    # srcs
     srcHost = resource[:sourcehost]
     srcPath = resource[:sourcepath]
     srcDev = resource[:sourcedev]
@@ -164,36 +159,22 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     if (srcHost || srcPath || srcDev || srcName || srcFormat)
       source = pool.add_element 'source'
 
-      if (srcHost)
-        source.add_element 'host', {'name' => srcHost}  
-      end
-
-      if (srcPath)
-        source.add_element 'dir', {'path' => srcPath}  
-      end
+      source.add_element('host', {'name' => srcHost})     if srcHost
+      source.add_element('dir', {'path' => srcPath})      if srcPath
+      source.add_element('format', {'type' => srcFormat}) if (srcFormat)
 
       if (srcDev)
-        if srcDev.respond_to? :each
-          srcDevArray = srcDev
-        else
-          srcDevArray = [srcDev]
+        Array(srcDev).each do |dev|
+          source.add_element('device', {'path' => dev})
         end
-        srcDevArray.each do |dev|
-          source.add_element 'device', {'path' => dev} 
-        end
-      end
-
-      if (srcFormat)
-        source.add_element 'format', {'type' => srcFormat}  
       end
 
       if (srcName)
-        srcNameEl = source.add_element 'name'  
+        srcNameEl = source.add_element 'name'
         srcNameEl.add_text srcName
       end
     end
 
-    # target
     target = resource[:target]
     if target
       targetEl = pool.add_element 'target'
