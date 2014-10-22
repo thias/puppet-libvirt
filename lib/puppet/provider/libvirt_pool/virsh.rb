@@ -6,12 +6,9 @@ include REXML
 Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   commands :virsh => 'virsh'
-  def virshq(*args)
-    virsh('-q', *args)
-  end
 
   def self.instances
-    list = virshq('pool-list', '--all')
+    list = virsh('-q', 'pool-list', '--all')
     list.split(/\n/)[0..-1].map do |line|
       values = line.strip.split(/ +/)
       new(
@@ -24,7 +21,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   end
 
   def status
-    list = virshq('pool-list', '--all')
+    list = virsh('-q', 'pool-list', '--all')
     list.split(/\n/)[0..-1].detect do |line|
       fields = line.strip.split(/ +/)
       if (fields[0].match(/^#{resource[:name]}$/))
