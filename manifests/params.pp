@@ -28,7 +28,7 @@ class libvirt::params {
       $unix_sock_group = $::operatingsystem ? {
 	'Debian' => 'libvirt',
 	'Ubuntu' => 'libvirtd', 
-      },
+      }
       $auth_unix_ro = 'none'
       $unix_sock_rw_perms = '0770'
       $auth_unix_rw = 'none'
