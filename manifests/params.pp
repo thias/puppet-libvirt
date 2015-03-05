@@ -27,7 +27,7 @@ class libvirt::params {
           $sysconfig = false
           $deb_default = {}
           # UNIX socket
-          $unix_sock_group = 'libvirt',
+          $unix_sock_group = 'libvirt'
           $auth_unix_ro = 'none'
           $unix_sock_rw_perms = '0770'
           $auth_unix_rw = 'none'
@@ -40,7 +40,7 @@ class libvirt::params {
           $sysconfig = false
           $deb_default = {}
           # UNIX socket
-          $unix_sock_group = 'libvirtd',
+          $unix_sock_group = 'libvirtd'
           $auth_unix_ro = 'none'
           $unix_sock_rw_perms = '0770'
           $auth_unix_rw = 'none'
