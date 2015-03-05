@@ -18,20 +18,33 @@ class libvirt::params {
       $deb_default = false
     }
     'Debian': {
-      $libvirt_package = 'libvirt-bin'
-      $libvirt_service = 'libvirt-bin'
-      $virtinst_package = 'virtinst'
-      $radvd_package = 'radvd'
-      $sysconfig = false
-      $deb_default = {}
-      # UNIX socket
-      $unix_sock_group = $::operatingsystem ? {
-	'Debian' => 'libvirt',
-	'Ubuntu' => 'libvirtd', 
-      }
-      $auth_unix_ro = 'none'
-      $unix_sock_rw_perms = '0770'
-      $auth_unix_rw = 'none'
+      case $::operatingsystem {
+        'Debian': {
+          $libvirt_package = 'libvirt-bin'
+          $libvirt_service = 'libvirtd'
+          $virtinst_package = 'virtinst'
+          $radvd_package = 'radvd'
+          $sysconfig = false
+          $deb_default = {}
+          # UNIX socket
+          $unix_sock_group = 'libvirt',
+          $auth_unix_ro = 'none'
+          $unix_sock_rw_perms = '0770'
+          $auth_unix_rw = 'none'
+        }
+      'Ubuntu': {
+          $libvirt_package = 'libvirt-bin'
+          $libvirt_service = 'libvirt-bin'
+          $virtinst_package = 'virtinst'
+          $radvd_package = 'radvd'
+          $sysconfig = false
+          $deb_default = {}
+          # UNIX socket
+          $unix_sock_group = 'libvirtd',
+          $auth_unix_ro = 'none'
+          $unix_sock_rw_perms = '0770'
+          $auth_unix_rw = 'none'
+        }
     }
     default: {
       $libvirt_package = 'libvirt'
