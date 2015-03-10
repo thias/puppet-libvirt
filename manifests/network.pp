@@ -72,11 +72,13 @@ define libvirt::network (
   $autostart          = false,
   $bridge             = undef,
   $forward_mode       = undef,
+  $virtualport        = false,
   $forward_dev        = undef,
   $forward_interfaces = [],
   $ip                 = undef,
   $ipv6               = undef,
   $mac                = undef,
+  $portgroups         = {},
 ) {
   validate_bool ($autostart)
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
