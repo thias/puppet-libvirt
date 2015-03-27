@@ -6,6 +6,26 @@ Puppet::Type.type(:network).provide(:libvirt) do
 
   $conn = Libvirt::open('qemu:///system')
 
+  def self.instances 
+    networks = []
+    for net in $conn.list_all_networks() do
+      hash = {
+        :name => net.name,
+        :autostart => net.autostart?,
+        }
+      networks << new(hash)
+    end
+    return networks
+  end
+
+  def self.prefetch(resources)
+    instances.each do |prov|
+      if resource = resources[prov.name]
+        resource.provider = prov
+      end
+    end
+  end
+
 
   def create
 net_xml = <<EOF
@@ -83,8 +103,7 @@ puts "error", e
   end
   
   def autostart
-    net = $conn.lookup_network_by_name(name)
-    net.autostart?
+    @property_hash[:autostart] == true
   end
   
   def autostart=(value)
