@@ -12,6 +12,8 @@ Puppet::Type.type(:network).provide(:libvirt) do
       hash = {
         :name => net.name,
         :autostart => net.autostart?,
+        :bridge => net.bridge_name,
+        :uuid => net.uuid   #the uuid is needed for updates to apply corectly
         }
       networks << new(hash)
     end
@@ -26,11 +28,17 @@ Puppet::Type.type(:network).provide(:libvirt) do
     end
   end
 
-
   def create
+    #this only exists because puppet demands it
+    #the flush function will create as needed
+  end
+
+
+  def flush
 net_xml = <<EOF
 <network>
   <name><%= @resource[:name] %></name>
+  <% if @property_hash[:uuid] %><uuid><%= @property_hash[:uuid] %></uuid><% end %>
   <% if @resource[:mac] %>
   <mac address='<%= @resource[:mac] %>'/>
   <% end %>
@@ -110,7 +118,12 @@ puts "error", e
     net = $conn.lookup_network_by_name(name)
     net.autostart = value
   end
-   
-   
+  
+  def bridge
+    @property_hash[:bridge]
+  end
+  
+  def bridge=(value)
+  end
   
 end

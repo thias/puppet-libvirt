@@ -11,7 +11,7 @@ Puppet::Type.newtype(:network) do
     desc "Whether to start this network at boot time"
   end
   
-  newparam(:bridge) do
+  newproperty(:bridge) do
     desc "Name of the bridge this network will be attached to"
   end
   
