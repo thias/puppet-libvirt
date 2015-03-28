@@ -50,7 +50,7 @@ Puppet::Type.newtype(:network) do
     bootp_server - Which server that file is served from"
   end
   
-  newparam(:mac) do
+  newproperty(:mac) do
     desc "mac address for the bridge"
   end
 
