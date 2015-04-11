@@ -15,7 +15,7 @@ Puppet::Type.newtype(:network) do
     desc "Name of the bridge this network will be attached to"
   end
   
-  newparam(:forward_mode) do
+  newproperty(:forward_mode) do
     desc "One of nat, route, bridge, vepa, passthrough, private, hostdev"
   end
   

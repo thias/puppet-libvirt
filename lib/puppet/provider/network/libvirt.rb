@@ -12,6 +12,9 @@ Puppet::Type.type(:network).provide(:libvirt) do
     definition = {}
     definition[:name] = doc.at_xpath('//name').content
     definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
+    if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('mode')
+      definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
+    end
     definition[:mac] = doc.at_xpath('//mac').attribute('address').content
     definition[:uuid] = doc.at_xpath('//uuid').content
     return definition
@@ -137,5 +140,12 @@ puts "error", e
   end
   
   def mac=(value)
+  end
+  
+  def forward_mode
+    @property_hash[:forward_mode]
+  end
+  
+  def forward_mode=(value)
   end
 end
