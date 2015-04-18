@@ -133,6 +133,7 @@ puts "error", e
   end
   
   def bridge=(value)
+    @property_hash[:bridge] = value
   end
   
   def mac
@@ -140,6 +141,7 @@ puts "error", e
   end
   
   def mac=(value)
+    @property_hash[:bridge] = value
   end
   
   def forward_mode
@@ -147,5 +149,6 @@ puts "error", e
   end
   
   def forward_mode=(value)
+    @property_hash = value
   end
 end
