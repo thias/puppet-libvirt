@@ -19,7 +19,7 @@ Puppet::Type.newtype(:network) do
     desc "One of nat, route, bridge, vepa, passthrough, private, hostdev"
   end
   
-  newparam(:forward_dev) do
+  newproperty(:forward_dev) do
     desc "The interface to forward, useful in bridge and route mode"
   end
   

@@ -4,6 +4,8 @@ require 'nokogiri'
 
 Puppet::Type.type(:network).provide(:libvirt) do
   desc "Create domains with libvirt"
+  
+  mk_resource_methods
 
   $conn = Libvirt::open('qemu:///system')
 
@@ -14,6 +16,9 @@ Puppet::Type.type(:network).provide(:libvirt) do
     definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
     if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('mode')
       definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
+    end
+    if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('dev')
+      definition[:forward_mode] = doc.at_xpath('//forward').attribute('dev').content
     end
     definition[:mac] = doc.at_xpath('//mac').attribute('address').content
     definition[:uuid] = doc.at_xpath('//uuid').content
@@ -39,7 +44,7 @@ Puppet::Type.type(:network).provide(:libvirt) do
   end
 
   def create
-    @property_hash = new(@resource)
+    @property_hash[:name] = resource[:name]
   end
 
 
@@ -127,28 +132,5 @@ puts "error", e
     net = $conn.lookup_network_by_name(name)
     net.autostart = value
   end
-  
-  def bridge
-    @property_hash[:bridge]
-  end
-  
-  def bridge=(value)
-    @property_hash[:bridge] = value
-  end
-  
-  def mac
-    @property_hash[:mac]
-  end
-  
-  def mac=(value)
-    @property_hash[:bridge] = value
-  end
-  
-  def forward_mode
-    @property_hash[:forward_mode]
-  end
-  
-  def forward_mode=(value)
-    @property_hash = value
-  end
+
 end
