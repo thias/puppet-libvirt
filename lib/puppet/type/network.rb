@@ -23,11 +23,11 @@ Puppet::Type.newtype(:network) do
     desc "The interface to forward, useful in bridge and route mode"
   end
   
-  newparam(:forward_interfaces) do
+  newproperty(:forward_interfaces) do
     desc "An array of interfaces to forwad"
   end
   
-  newparam(:ip) do
+  newproperty(:ip) do
     desc "a hash with
     address
     netmask (or alterntively prefix)
@@ -37,7 +37,7 @@ Puppet::Type.newtype(:network) do
       host - an array of hosts"
   end
   
-  newparam(:ipv6) do
+  newproperty(:ipv6) do
     desc "a hash with
     address
     netmask (or alterntively prefix)
