@@ -17,6 +17,8 @@ Puppet::Type.newtype(:network) do
   
   newproperty(:forward_mode) do
     desc "One of nat, route, bridge, vepa, passthrough, private, hostdev"
+    #TODO nat must have an ip address
+    #TODO A network with forward mode='bridge' can specify a bridge name or a forward dev, but not both
   end
   
   newproperty(:forward_dev) do

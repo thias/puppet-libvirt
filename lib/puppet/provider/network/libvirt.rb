@@ -13,7 +13,9 @@ Puppet::Type.type(:network).provide(:libvirt) do
     doc = Nokogiri::XML(network.xml_desc)
     definition = {}
     definition[:name] = doc.at_xpath('//name').content
-    definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
+    if doc.at_xpath('//bridge') and doc.at_xpath('//bridge').attribute('name')
+      definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
+    end
     if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('mode')
       definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
     end
@@ -44,21 +46,22 @@ Puppet::Type.type(:network).provide(:libvirt) do
   end
 
   def create
-    @property_hash[:name] = resource[:name]
+ #   @property_hash = @resource
   end
 
 
   def flush
+  debug("flushing '" + @resource[:name] + "' with: " + @property_hash.to_s )
 net_xml = <<EOF
 <network>
-  <name><%= @property_hash[:name] %></name>
+  <name><%= @resource[:name] %></name>
   <% if @property_hash[:uuid] %><uuid><%= @property_hash[:uuid] %></uuid><% end %>
   <% if @property_hash[:mac] %>
   <mac address='<%= @property_hash[:mac] %>'/>
   <% end %>
   <% if @property_hash[:forward_mode] %>
-  <forward<% if @property_hash[:forward_dev] %> dev='<%= @property_hash[:forward_dev] %>'<%end%> mode='<%= @property_hash[:forward_mode] %>'<% if @property_hash[:forward_interfaces] %>/<%end%>>
-  <%  if !@property_hash[:forward_interfaces] %>
+  <forward<% if @property_hash[:forward_dev] %> dev='<%= @property_hash[:forward_dev] %>'<%end%> mode='<%= @property_hash[:forward_mode] %>'<% if !@property_hash[:forward_interfaces] %>/<%end%>>
+  <%  if @property_hash[:forward_interfaces] %>
   <%    @property_hash[:forward_interfaces].each do |dev| %>
     <interface dev='<%= dev %>'/>
   <%    end %>
@@ -102,6 +105,7 @@ net_xml = <<EOF
 </network>
 EOF
     new_net_xml = ERB.new(net_xml).result(binding)
+    debug("generated: " + new_net_xml )
     begin
       net = $conn.define_network_xml(new_net_xml)
     rescue Libvirt::Error => e
