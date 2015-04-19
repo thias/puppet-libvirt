@@ -13,17 +13,21 @@ Puppet::Type.type(:network).provide(:libvirt) do
     doc = Nokogiri::XML(network.xml_desc)
     definition = {}
     definition[:name] = doc.at_xpath('//name').content
+    definition[:uuid] = doc.at_xpath('//uuid').content
     if doc.at_xpath('//bridge') and doc.at_xpath('//bridge').attribute('name')
       definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
     end
-    if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('mode')
-      definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
+    if doc.at_xpath('//forward')
+      if doc.at_xpath('//forward').attribute('mode')
+        definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
+      end
+      if doc.at_xpath('//forward').attribute('dev')
+        definition[:forward_dev] = doc.at_xpath('//forward').attribute('dev').content
+      end
     end
-    if doc.at_xpath('//forward') and doc.at_xpath('//forward').attribute('dev')
-      definition[:forward_mode] = doc.at_xpath('//forward').attribute('dev').content
+    if doc.at_xpath('//mac')
+      definition[:mac] = doc.at_xpath('//mac').attribute('address').content
     end
-    definition[:mac] = doc.at_xpath('//mac').attribute('address').content
-    definition[:uuid] = doc.at_xpath('//uuid').content
     return definition
   end
 
