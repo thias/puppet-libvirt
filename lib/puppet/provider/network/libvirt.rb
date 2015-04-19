@@ -18,11 +18,35 @@ Puppet::Type.type(:network).provide(:libvirt) do
       definition[:bridge] = doc.at_xpath('//bridge').attribute('name').content
     end
     if doc.at_xpath('//forward')
-      if doc.at_xpath('//forward').attribute('mode')
-        definition[:forward_mode] = doc.at_xpath('//forward').attribute('mode').content
+      forward = doc.at_xpath('//forward')
+      if forward.attribute('mode')
+        definition[:forward_mode] = forward.attribute('mode').content
       end
-      if doc.at_xpath('//forward').attribute('dev')
-        definition[:forward_dev] = doc.at_xpath('//forward').attribute('dev').content
+      if forward.attribute('dev')
+        definition[:forward_dev] = forward.attribute('dev').content
+      end
+      if forward.xpath('//interface')
+        definition[:forward_interfaces] = []
+        for int in forward.xpath('//interface')
+          definition[:forward_interfaces].push(int.attribute('dev').content)
+        end
+      end
+    end
+    if doc.xpath('//ip')
+      definition[:ip] = []
+      definition[:ipv6] = []
+      for ip in doc.xpath('//ip')
+        data = {}
+        for setting in ['address', 'netmask', 'prefix']
+          if ip.attribute(setting)
+            data[setting] = ip.attribute(setting).content
+          end
+        end
+        if ip.attribute('family') and ip.attribute('family').content == 'ipv6'
+          definition[:ipv6].push(data)
+        else
+          definition[:ip].push(data)
+        end
       end
     end
     if doc.at_xpath('//mac')
