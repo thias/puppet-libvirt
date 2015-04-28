@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Matthias Saou",
   "license": "Apache-2.0",
-  "summary": "Libvirt virtualization API and capabilities."
+  "summary": "Libvirt virtualization API and capabilities.",
   "source": "git://github.com/thias/puppet-libvirt",
   "project_page": "https://github.com/thias/puppet-libvirt",
   "issues_url": "https://github.com/thias/puppet-libvirt/issues",
