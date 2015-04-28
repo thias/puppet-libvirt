@@ -1,3 +1,5 @@
+* Strip whitespace to fix pool detection (#30, @CyBeRoni).
+
 2014-05-05 - 0.3.2
 * Bugfix for debian defaults with Puppet 2.7 (#28, @darktim).
 * Add qemu_user and qemu_group parameters (#28, @darktim).

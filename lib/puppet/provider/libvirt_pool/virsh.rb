@@ -12,7 +12,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
     hash = {}
     list = virsh '-q', 'pool-list', '--all'
     list.split(/\n/)[0..-1].map do |line|
-      values = line.split(/ +/)
+      values = line.strip.split(/ +/)
       hash = { 
         :name      => values[0],
         :active    => values[1].match(/^act/)? :true : :false,
@@ -28,7 +28,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   def status
     list = virsh '-q', 'pool-list', '--all'
     list.split(/\n/)[0..-1].detect do |line|  
-      fields = line.split(/ +/)
+      fields = line.strip.split(/ +/)
       if (fields[0].match(/^#{resource[:name]}$/))
         return :present
       end
