@@ -85,11 +85,12 @@ define libvirt::network (
   include ::libvirt::params
 
   Exec {
-    cwd      => '/',
-    path     => '/bin:/usr/bin',
-    user     => 'root',
-    provider => 'posix',
-    require  => Service[$::libvirt::params::libvirt_service],
+    cwd         => '/',
+    path        => '/bin:/usr/bin',
+    user        => 'root',
+    provider    => 'posix',
+    require     => Service[$::libvirt::params::libvirt_service],
+    environment => ['LC_ALL=en_US.utf8', ],
   }
 
   $ensure_file = $ensure? {
