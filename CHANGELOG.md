@@ -1,3 +1,4 @@
+#### 2015-04-28 - 1.0.0
 * Strip whitespace to fix pool detection (#30, @CyBeRoni).
 * Convert spec system to beaker tests (#33, @igalic).
 * Fix activate vs. active in the README (#35, @unicorn-ljw).
