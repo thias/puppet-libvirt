@@ -1,8 +1,6 @@
 require 'rexml/document'
 require 'tempfile'
 
-include REXML
-
 Puppet::Type.type(:libvirt_pool).provide(:virsh) do
 
   commands :virsh => 'virsh'
@@ -142,7 +140,7 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   end
 
   def buildPoolXML(resource)
-    root = Document.new
+    root = REXML::Document.new
     pool = root.add_element 'pool', {'type' => resource[:type]}
     name = pool.add_element 'name'
     name.add_text resource[:name]
