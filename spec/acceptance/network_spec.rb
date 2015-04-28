@@ -1,29 +1,19 @@
-#   Copyright 2013 Brainsware
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'libvirt::network' do
   network_dir = '/etc/libvirt/qemu/networks'
 
   context 'enable default network' do
     it 'should enable the default network' do
-      puppet_apply(%{
+      pp = <<-EOS
          class { 'libvirt':
            defaultnetwork => true
          }
-      }) { |r| [0,2].should include r.exit_code}
+      EOS
+
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
     it 'respond to ping on IP 192.168.122.1 (for interface virbr0)' do
@@ -35,14 +25,18 @@ describe 'libvirt::network' do
 
   context 'network directly connected via bridge' do
     it 'should create a network directly connected via a bridge' do
-      puppet_apply(%{
+      pp = <<-EOS
          class { 'libvirt': }
          libvirt::network { 'direct-net':
            forward_mode       => 'bridge',
            forward_dev        => 'eth0',
            forward_interfaces => [ 'eth0']
          }
-      }) { |r| [0,2].should include r.exit_code}
+      EOS
+
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
     describe file("#{network_dir}/direct-net.xml") do
@@ -53,7 +47,7 @@ describe 'libvirt::network' do
 
   context 'network directly connected via autostarted bridge' do
     it 'should create an autostarted network directly connected via a bridge' do
-      puppet_apply(%{
+      pp = <<-EOS
          class { 'libvirt': }
          libvirt::network { 'direct-net':
            autostart          => true,
@@ -61,7 +55,11 @@ describe 'libvirt::network' do
            forward_dev        => 'eth0',
            forward_interfaces => [ 'eth0']
          }
-      }) { |r| [0,2].should include r.exit_code}
+      EOS
+
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
     it 'respond to ping on public IPs (for interface eth0)' do
@@ -73,7 +71,7 @@ describe 'libvirt::network' do
 
   context 'autostarted pxe boot via dhcp' do
     it 'should create an autostarted network for booting from DHCP' do
-      puppet_apply(%{
+      pp = <<-EOS
          class { 'libvirt': }
          $dhcp = {
            'start' => '192.168.122.2',
@@ -93,7 +91,11 @@ describe 'libvirt::network' do
            bridge       => 'virbr0',
            ip           => [ $ip]
          }
-      }) { |r| [0,2].should include r.exit_code}
+      EOS
+
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
     it 'respond to ping on IP 192.168.122.1 (for interface virbr0)' do
@@ -105,7 +107,7 @@ describe 'libvirt::network' do
 
   context 'autostarted dual-stack' do
     it 'should create an autostarted network with NATed IPv4 network and an IPv6 address' do
-      puppet_apply(%{
+      pp = <<-EOS
          class { 'libvirt': }
          $dhcp = {
            'start' => '192.168.222.2',
@@ -128,7 +130,11 @@ describe 'libvirt::network' do
            ip           => [ $ip],
            ipv6         => [ $ipv6 ],
          }
-      }) { |r| [0,2].should include r.exit_code}
+      EOS
+
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
     it 'respond to ping on IP 192.168.222.1 (for interface virbr2)' do
