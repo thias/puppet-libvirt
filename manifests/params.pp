@@ -19,16 +19,24 @@ class libvirt::params {
     }
     'Debian': {
       $libvirt_package = 'libvirt-bin'
-      $libvirt_service = 'libvirt-bin'
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
       $deb_default = {}
       # UNIX socket
-      $unix_sock_group = 'libvirtd'
       $auth_unix_ro = 'none'
       $unix_sock_rw_perms = '0770'
       $auth_unix_rw = 'none'
+      case $::operatingsystem {
+        'Ubuntu': {
+          $libvirt_service = 'libvirt-bin'
+          $unix_sock_group = 'libvirtd'
+        }
+        default: {
+          $libvirt_service = 'libvirtd'
+          $unix_sock_group = 'libvirt'
+        }
+      }
     }
     default: {
       $libvirt_package = 'libvirt'
