@@ -46,4 +46,18 @@
     <%- end-%>
   <%-  end-%>
   <%-end-%>
+  <%- if @vlan -%>
+  <%-   @vlan.each do |vlan| -%>
+  <vlan <%= vlan['trunk'] ? "trunk='yes'" : '' %>>
+  <%-     vlan['tags'].each do |tag| -%>
+    <tag id='<%= tag['id'] %>' <%= tag['native_mode'] ? "nativeMode='#{tag['native_mode']}'" : '' %> />
+  <%-     end -%>
+  </vlan>
+  <%-   end -%>
+  <%- end -%>
+  <%- if @virtualport -%>
+  <%-   @virtualport.each do |virtualport| -%>
+  <virtualport type='<%= virtualport['type'] ? virtualport['type'] : '' %>'/>
+  <%-   end -%>
+  <%- end -%>
 </network>
