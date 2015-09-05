@@ -62,4 +62,21 @@ describe 'libvirt class' do
     end
   end
 
+  context 'with network hook' do
+    it 'should work with no errors' do
+      pp = <<-EOS
+      class { 'libvirt':
+        network_hook_content => "this is a test"
+      }
+      EOS
+      # Run it twice and test for idempotency
+      expect(apply_manifest(pp).exit_code).to_not eq(1)
+      expect(apply_manifest(pp).exit_code).to eq(0)
+    end
+    
+    describe file("/etc/libvirt/hooks/network") do
+      it { should contain 'this is a test' }
+    end
+  end
+
 end
