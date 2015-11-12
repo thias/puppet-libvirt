@@ -28,7 +28,7 @@ class libvirt::params {
       $unix_sock_rw_perms = '0770'
       $auth_unix_rw = 'none'
       case $::operatingsystem {
-        'Ubuntu': {
+        'Ubuntu', 'LinuxMint': {
           $libvirt_service = 'libvirt-bin'
           $unix_sock_group = 'libvirtd'
         }
