@@ -65,7 +65,7 @@ class libvirt (
 
   if $tls_allowed_dn_list {
     $tls_allowed_dn_joined =
-      join(suffix(prefix($tls_allowed_dn_list, '\"'), '\"'),',')
+      join(suffix(prefix($tls_allowed_dn_list, '"'), '"'),',')
   }
 
   package { 'libvirt':
