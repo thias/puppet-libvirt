@@ -264,7 +264,11 @@ auth_tls = "<%= @auth_tls %>"
 # entirely rather than using empty list to disable these checks
 #
 # By default, no DN's are checked
+<%- if @tls_allowed_dn_joined -%>
+tls_allowed_dn_list = [ <%= @tls_allowed_dn_joined %> ]
+<%- else -%>
 #tls_allowed_dn_list = ["DN1", "DN2"]
+<%- end -%>
 
 
 # A whitelist of allowed SASL usernames. The format for usernames
