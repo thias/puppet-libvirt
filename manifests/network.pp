@@ -77,6 +77,8 @@ define libvirt::network (
   $ip                 = undef,
   $ipv6               = undef,
   $mac                = undef,
+  $vlan               = undef,
+  $virtualport        = undef,
 ) {
   validate_bool ($autostart)
   validate_re ($ensure, '^(present|defined|enabled|running|undefined|absent)$',
@@ -89,7 +91,7 @@ define libvirt::network (
     path        => '/bin:/usr/bin',
     user        => 'root',
     provider    => 'posix',
-    require     => Service[$::libvirt::params::libvirt_service],
+    require     => Service['libvirtd'],
     environment => ['LC_ALL=en_US.utf8', ],
   }
 
