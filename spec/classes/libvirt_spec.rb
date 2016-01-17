@@ -1,4 +1,4 @@
-#   Copyright 2013 Brainsware
+#   Copyright 2015 any number of authors
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,18 +15,30 @@
 require 'spec_helper'
 
 describe 'libvirt', :type => :class do
-  let(:title) { 'libvirt' }
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os} #{facts}" do
+        let(:facts) do
+          facts
+        end
 
-  it { should contain_class('libvirt') }
-  it { should contain_file('/etc/libvirt/qemu/networks/autostart/default.xml') 
-       .with_ensure('absent')
-  }
+        context 'with default parameters' do
+          let(:title) { 'libvirt' }
 
-  describe 'with default network enabled' do
-    let(:params) {{ :defaultnetwork => true }}
+          it { should contain_class('libvirt') }
+          it { should contain_file('/etc/libvirt/qemu/networks/autostart/default.xml')
+               .with_ensure('absent')
+          }
+        end
 
-    it { should contain_class('libvirt') }
-    it { should contain_exec('virsh-net-autostart-default') }
+        context 'with default network enabled' do
+          let(:params) {{ :defaultnetwork => true }}
+
+          it { should contain_class('libvirt') }
+          it { should contain_exec('virsh-net-autostart-default') }
+        end
+      end
+    end
   end
 
 end
