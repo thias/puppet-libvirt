@@ -63,6 +63,11 @@ vnc_tls = 0
 # certificate signed by the CA in /etc/pki/libvirt-vnc/ca-cert.pem
 #
 # vnc_tls_x509_verify = 1
+<% if @qemu_vnc_tls_x509_verify == true -%>
+vnc_tls_x509_verify = 1
+<% elsif @qemu_vnc_tls_x509_verify == false -%>
+vnc_tls_x509_verify = 0
+<% end -%>
 
 
 # The default VNC password. Only 8 letters are significant for
