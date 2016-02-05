@@ -211,19 +211,31 @@ auth_tls = "<%= @auth_tls %>"
 # Override the default server key file path
 #
 #key_file = "/etc/pki/libvirt/private/serverkey.pem"
+<% if @key_file -%>
+key_file = "<%= @key_file %>"
+<% end -%>
 
 # Override the default server certificate file path
 #
 #cert_file = "/etc/pki/libvirt/servercert.pem"
+<% if @cert_file -%>
+cert_file = "<%= @cert_file %>"
+<% end -%>
 
 # Override the default CA certificate path
 #
 #ca_file = "/etc/pki/CA/cacert.pem"
+<% if @ca_file -%>
+ca_file = "<%= @ca_file %>"
+<% end -%>
 
 # Specify a certificate revocation list.
 #
 # Defaults to not using a CRL, uncomment to enable it
 #crl_file = "/etc/pki/CA/crl.pem"
+<% if @crl_file -%>
+crl_file = "<%= @crl_file %>"
+<% end -%>
 
 
 
@@ -265,6 +277,9 @@ auth_tls = "<%= @auth_tls %>"
 #
 # By default, no DN's are checked
 #tls_allowed_dn_list = ["DN1", "DN2"]
+<% if @tls_allowed_dn_list -%>
+tls_allowed_dn_list = "<%= @tls_allowed_dn_list %>"
+<% end -%>
 
 
 # A whitelist of allowed SASL usernames. The format for usernames
