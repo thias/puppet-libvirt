@@ -41,6 +41,11 @@ class libvirt (
   $mdns_adv                  = undef,
   $auth_tcp                  = undef,
   $auth_tls                  = undef,
+  $key_file                  = undef,
+  $cert_file                 = undef,
+  $ca_file                   = undef,
+  $crl_file                  = undef,
+  $tls_allowed_dn_list       = undef,
   $unix_sock_group           = $::libvirt::params::unix_sock_group,
   $unix_sock_ro_perms        = $::libvirt::params::unix_sock_ro_perms,
   $auth_unix_ro              = $::libvirt::params::auth_unix_ro,
@@ -160,4 +165,3 @@ class libvirt (
   create_resources(libvirt::network, $networks, $networks_defaults)
 
 }
-
