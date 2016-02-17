@@ -125,7 +125,7 @@ define libvirt::network (
         exec { "virsh-net-start-${title}":
           command => "virsh net-start ${title}",
           require => Exec["virsh-net-define-${title}"],
-          unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+active'",
+          unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}\s+active'",
         }
       }
     }
