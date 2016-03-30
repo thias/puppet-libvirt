@@ -52,6 +52,12 @@ class libvirt (
   $unix_sock_rw_perms        = $::libvirt::params::unix_sock_rw_perms,
   $auth_unix_rw              = $::libvirt::params::auth_unix_rw,
   $unix_sock_dir             = $::libvirt::params::unix_sock_dir,
+  $max_clients               = undef,
+  $min_workers               = undef,
+  $max_workers               = undef,
+  $prio_workers              = undef,
+  $max_requests              = undef,
+  $max_client_requests       = undef,
   # qemu.conf options
   $qemu_vnc_listen           = undef,
   $qemu_vnc_sasl             = undef,
