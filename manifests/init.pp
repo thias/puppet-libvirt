@@ -41,12 +41,23 @@ class libvirt (
   $mdns_adv                  = undef,
   $auth_tcp                  = undef,
   $auth_tls                  = undef,
+  $key_file                  = undef,
+  $cert_file                 = undef,
+  $ca_file                   = undef,
+  $crl_file                  = undef,
+  $tls_allowed_dn_list       = undef,
   $unix_sock_group           = $::libvirt::params::unix_sock_group,
   $unix_sock_ro_perms        = $::libvirt::params::unix_sock_ro_perms,
   $auth_unix_ro              = $::libvirt::params::auth_unix_ro,
   $unix_sock_rw_perms        = $::libvirt::params::unix_sock_rw_perms,
   $auth_unix_rw              = $::libvirt::params::auth_unix_rw,
   $unix_sock_dir             = $::libvirt::params::unix_sock_dir,
+  $max_clients               = undef,
+  $min_workers               = undef,
+  $max_workers               = undef,
+  $prio_workers              = undef,
+  $max_requests              = undef,
+  $max_client_requests       = undef,
   # qemu.conf options
   $qemu_vnc_listen           = undef,
   $qemu_vnc_sasl             = undef,
@@ -160,4 +171,3 @@ class libvirt (
   create_resources(libvirt::network, $networks, $networks_defaults)
 
 }
-

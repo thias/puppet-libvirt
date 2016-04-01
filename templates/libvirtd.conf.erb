@@ -211,20 +211,31 @@ auth_tls = "<%= @auth_tls %>"
 # Override the default server key file path
 #
 #key_file = "/etc/pki/libvirt/private/serverkey.pem"
+<% if @key_file -%>
+key_file = "<%= @key_file %>"
+<% end -%>
 
 # Override the default server certificate file path
 #
 #cert_file = "/etc/pki/libvirt/servercert.pem"
+<% if @cert_file -%>
+cert_file = "<%= @cert_file %>"
+<% end -%>
 
 # Override the default CA certificate path
 #
 #ca_file = "/etc/pki/CA/cacert.pem"
+<% if @ca_file -%>
+ca_file = "<%= @ca_file %>"
+<% end -%>
 
 # Specify a certificate revocation list.
 #
 # Defaults to not using a CRL, uncomment to enable it
 #crl_file = "/etc/pki/CA/crl.pem"
-
+<% if @crl_file -%>
+crl_file = "<%= @crl_file %>"
+<% end -%>
 
 
 #################################################################
@@ -265,7 +276,9 @@ auth_tls = "<%= @auth_tls %>"
 #
 # By default, no DN's are checked
 #tls_allowed_dn_list = ["DN1", "DN2"]
-
+<% if @tls_allowed_dn_list -%>
+tls_allowed_dn_list = <%= @tls_allowed_dn_list %>
+<% end -%>
 
 # A whitelist of allowed SASL usernames. The format for usernames
 # depends on the SASL authentication mechanism. Kerberos usernames
@@ -293,6 +306,9 @@ auth_tls = "<%= @auth_tls %>"
 # The maximum number of concurrent client connections to allow
 # over all sockets combined.
 #max_clients = 20
+<% if @max_clients -%>
+max_clients = <%= @max_clients %>
+<% end -%>
 
 
 # The minimum limit sets the number of workers to start up
@@ -301,13 +317,22 @@ auth_tls = "<%= @auth_tls %>"
 # Typically you'd want max_workers to equal maximum number
 # of clients allowed
 #min_workers = 5
+<% if @min_workers -%>
+min_workers = <%= @min_workers %>
+<% end -%>
 #max_workers = 20
+<% if @max_workers -%>
+max_workers = <%= @max_workers %>
+<% end -%>
 
 
 # The number of priority workers. If all workers from above
 # pool will stuck, some calls marked as high priority
 # (notably domainDestroy) can be executed in this pool.
 #prio_workers = 5
+<% if @prio_workers -%>
+prio_workers = <%= @prio_workers %>
+<% end -%>
 
 # Total global limit on concurrent RPC calls. Should be
 # at least as large as max_workers. Beyond this, RPC requests
@@ -318,12 +343,18 @@ auth_tls = "<%= @auth_tls %>"
 # XXX this isn't actually enforced yet, only the per-client
 # limit is used so far
 #max_requests = 20
+<% if @max_requests -%>
+max_requests = <%= @max_requests %>
+<% end -%>
 
 # Limit on concurrent requests from a single client
 # connection. To avoid one client monopolizing the server
 # this should be a small fraction of the global max_requests
 # and max_workers parameter
 #max_client_requests = 5
+<% if @max_client_requests -%>
+max_client_requests = <%= @max_client_requests %>
+<% end -%>
 
 #################################################################
 #
