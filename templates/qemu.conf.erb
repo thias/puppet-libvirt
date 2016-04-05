@@ -213,6 +213,9 @@ group = "<%= @qemu_group %>"
 #    "/dev/rtc", "/dev/hpet",
 #]
 
+<% if @qemu_cgroup_device_acl -%>
+cgroup_device_acl = [ "<%= @qemu_cgroup_device_acl.join('", "') %>" ]
+<% end -%>
 
 # The default format for Qemu/KVM guest save images is raw; that is, the
 # memory from the domain is dumped out directly to a file.  If you have
@@ -302,6 +305,9 @@ group = "<%= @qemu_group %>"
 #
 # clear_emulator_capabilities = 1
 
+<% if @qemu_clear_emulator_capabilities -%>
+clear_emulator_capabilities = <%= @qemu_clear_emulator_capabilities %>
+<% end -%>
 
 # If allow_disk_format_probing is enabled, libvirt will probe disk
 # images to attempt to identify their format, when not otherwise
