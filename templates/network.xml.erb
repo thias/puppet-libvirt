@@ -1,5 +1,8 @@
 <network>
   <name><%= @name -%></name>
+  <%- if @domain_name -%>
+  <domain name='<%= @domain_name -%>'/>
+  <%- end -%>
   <%- if @mac -%>
   <mac address='<%= @mac -%>'/>
   <%- end -%>
