@@ -29,6 +29,7 @@ class libvirt (
   $libvirt_package           = $::libvirt::params::libvirt_package,
   $libvirt_service           = $::libvirt::params::libvirt_service,
   $virtinst_package          = $::libvirt::params::virtinst_package,
+  $qemu_package              = $::libvirt::params::qemu_package,
   $radvd_package             = $::libvirt::params::radvd_package,
   $sysconfig                 = $::libvirt::params::sysconfig,
   $deb_default               = $::libvirt::params::deb_default,
@@ -120,7 +121,10 @@ class libvirt (
     package { $virtinst_package: ensure => installed }
   }
   if $qemu {
-    package { 'qemu-kvm': ensure => installed }
+    package { 'qemu-kvm':
+      ensure => installed,
+      name   => $qemu_package,
+    }
     file { '/etc/sasl2/qemu-kvm.conf':
       owner   => 'root',
       group   => 'root',

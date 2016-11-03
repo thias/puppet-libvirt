@@ -13,6 +13,7 @@ class libvirt::params {
       } else {
         $virtinst_package = 'python-virtinst'
       }
+      $qemu_package = 'qemu-kvm'
       $radvd_package = 'radvd'
       $sysconfig = {}
       $deb_default = false
@@ -20,6 +21,7 @@ class libvirt::params {
     'Debian': {
       $libvirt_package = 'libvirt-bin'
       $virtinst_package = 'virtinst'
+      $qemu_package = 'qemu-kvm'
       $radvd_package = 'radvd'
       $sysconfig = false
       $deb_default = {}
@@ -42,6 +44,7 @@ class libvirt::params {
       $libvirt_package = 'libvirt'
       $libvirt_service = 'libvirtd'
       $virtinst_package = 'python-virtinst'
+      $qemu_package = 'qemu-kvm'
       $radvd_package = 'radvd'
       $sysconfig = false
       $deb_default = false
