@@ -148,6 +148,9 @@ vnc_sasl = 0
 # to 'none' instead.
 #
 # security_driver = "selinux"
+<% if @qemu_security_driver -%>
+security_driver = "<%= @qemu_security_driver %>"
+<% end -%>
 
 # If set to non-zero, then the default security labeling
 # will make guests confined. If set to zero, then guests
