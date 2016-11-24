@@ -139,7 +139,7 @@ define libvirt::network (
         onlyif  => "virsh -q net-list --all | grep -Eq '^\s*${title}\\s+inactive'",
         require => Exec["virsh-net-destroy-${title}"],
       }
-      file { [ $network_file, $autostart_file ]:
+      file { $autostart_file:
         ensure  => absent,
         require => Exec["virsh-net-undefine-${title}"],
       }

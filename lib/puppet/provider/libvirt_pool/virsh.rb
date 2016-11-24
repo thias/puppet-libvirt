@@ -8,21 +8,21 @@ Puppet::Type.type(:libvirt_pool).provide(:virsh) do
   def self.instances
     list = virsh('-q', 'pool-list', '--all')
     list.split(/\n/)[0..-1].map do |line|
-      values = line.strip.split(/ +/)
-      new(
-        :name      => values[0],
-        :active    => values[1].match(/^act/)? :true : :false,
-        :autostart => values[2].match(/no/) ? :false : :true,
+      values = line.split(/ +/)
+      hash = {
+        :name      => values[1],
+        :active    => values[2].match(/^act/)? :true : :false,
+        :autostart => values[3].match(/no/) ? :false : :true,
         :provider  => self.name
       )
     end
   end
 
   def status
-    list = virsh('-q', 'pool-list', '--all')
+    list = virsh '-q', 'pool-list', '--all'
     list.split(/\n/)[0..-1].detect do |line|
-      fields = line.strip.split(/ +/)
-      if (fields[0].match(/^#{resource[:name]}$/))
+      fields = line.split(/ +/)
+      if (fields[1].match(/^#{resource[:name]}$/))
         return :present
       end
     end
