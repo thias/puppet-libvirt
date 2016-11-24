@@ -39,9 +39,10 @@ The module also allows the user to customize qemu parameters :
 
 ```puppet
 class { '::libvirt':
-  qemu_vnc_listen => "0.0.0.0",
-  qemu_vnc_sasl   => true,
-  qemu_vnc_tls    => false,
+  qemu_vnc_listen         => "0.0.0.0",
+  qemu_vnc_sasl           => true,
+  qemu_vnc_tls            => false,
+  qemu_security_driver    => 'none',
 }
 ```
 
