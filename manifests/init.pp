@@ -24,12 +24,14 @@ class libvirt (
   $networks                  = {},
   $networks_defaults         = {},
   $virtinst                  = true,
+  $python                    = false,
   $qemu                      = true,
   $radvd                     = false,
   $libvirt_package           = $::libvirt::params::libvirt_package,
   $libvirt_service           = $::libvirt::params::libvirt_service,
   $virtinst_package          = $::libvirt::params::virtinst_package,
   $radvd_package             = $::libvirt::params::radvd_package,
+  $python_package            = $::libvirt::params::python_package,
   $sysconfig                 = $::libvirt::params::sysconfig,
   $deb_default               = $::libvirt::params::deb_default,
   # libvirtd.conf options
@@ -120,7 +122,9 @@ class libvirt (
     package { $virtinst_package: ensure => installed }
   }
   if $qemu {
-    package { 'qemu-kvm': ensure => installed }
+    if ! defined(Package['qemu-kvm']) {
+      package { 'qemu-kvm': ensure => installed }
+    }
     file { '/etc/sasl2/qemu-kvm.conf':
       owner   => 'root',
       group   => 'root',
@@ -131,7 +135,14 @@ class libvirt (
     }
   }
   if $radvd {
-    package { $radvd_package: ensure => installed }
+    if ! defined(Package[$radvd_package]) {
+      package { $radvd_package: ensure => installed }
+    }
+  }
+  if $python {
+    if ! defined(Package[$python_package]) {
+      package { $python_package: ensure => installed }
+    }
   }
 
   # Optional changes to the sysconfig file (on RedHat)
@@ -160,4 +171,3 @@ class libvirt (
   create_resources(libvirt::network, $networks, $networks_defaults)
 
 }
-
