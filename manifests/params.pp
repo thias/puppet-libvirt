@@ -22,7 +22,10 @@ class libvirt::params {
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
-      $deb_default = {}
+      $deb_default = $::service_provider ? {
+        'systemd' => { 'libvirtd_opts' => '' },  # no '-d', it confuses systemd
+        default   => {},
+      }
       # UNIX socket
       $auth_unix_ro = 'none'
       $unix_sock_rw_perms = '0770'
