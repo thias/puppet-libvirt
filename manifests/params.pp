@@ -18,7 +18,7 @@ class libvirt::params {
       $deb_default = false
     }
     'Debian': {
-      $libvirt_package = 'libvirt-bin'
+      $libvirt_package = lookup("libvirt::package", String, 'first', "libvirt-bin")
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
