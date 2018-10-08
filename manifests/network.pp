@@ -111,7 +111,7 @@ define libvirt::network (
       }
       exec { "virsh-net-define-${title}":
         command => "virsh net-define ${network_file}",
-        unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}'",
+        unless  => "virsh -q net-list --all | grep -Eq '^\s*${title}\s'",
         require => Exec["create-${network_file}"],
       }
       if $autostart {
