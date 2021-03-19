@@ -16,6 +16,12 @@ class libvirt::params {
       $radvd_package = 'radvd'
       $sysconfig = {}
       $deb_default = false
+      $auth_unix_ro = undef
+      $auth_unix_rw = undef
+      $unix_sock_dir = undef
+      $unix_sock_group = undef
+      $unix_sock_ro_perms = undef
+      $unix_sock_rw_perms = undef
     }
     'Debian': {
       $libvirt_package = 'libvirt-bin'
