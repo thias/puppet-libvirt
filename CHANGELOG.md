@@ -1,4 +1,6 @@
+#### 2021-06-30 - 1.0.1
 * Add support for Linux Mint (#55, @ssaki).
+* Add support for RHEL8 with templates as close to the original as possible.
 
 #### 2015-04-28 - 1.0.0
 * Strip whitespace to fix pool detection (#30, @CyBeRoni).

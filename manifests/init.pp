@@ -42,11 +42,11 @@ class libvirt (
   $auth_tcp                  = undef,
   $auth_tls                  = undef,
   $unix_sock_group           = $::libvirt::params::unix_sock_group,
-  $unix_sock_ro_perms        = $::libvirt::params::unix_sock_ro_perms,
+  $unix_sock_ro_perms        = undef,
   $auth_unix_ro              = $::libvirt::params::auth_unix_ro,
   $unix_sock_rw_perms        = $::libvirt::params::unix_sock_rw_perms,
   $auth_unix_rw              = $::libvirt::params::auth_unix_rw,
-  $unix_sock_dir             = $::libvirt::params::unix_sock_dir,
+  $unix_sock_dir             = undef,
   # qemu.conf options
   $qemu_vnc_listen           = undef,
   $qemu_vnc_sasl             = undef,
@@ -61,6 +61,13 @@ class libvirt (
   $sasl2_qemu_keytab         = undef,
   $sasl2_qemu_auxprop_plugin = undef,
 ) inherits ::libvirt::params {
+
+  # Keep multiple templates, as close to the original as possible
+  if $::osfamily == 'RedHat' and versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+    $filesuffix = '-el8'
+  } else {
+    $filesuffix = ''
+  }
 
   package { 'libvirt':
     ensure => installed,
@@ -79,7 +86,7 @@ class libvirt (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('libvirt/libvirtd.conf.erb'),
+    content => template("libvirt/libvirtd.conf${filesuffix}.erb"),
     notify  => Service['libvirtd'],
     require => Package['libvirt'],
   }
@@ -88,7 +95,7 @@ class libvirt (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('libvirt/qemu.conf.erb'),
+    content => template("libvirt/qemu.conf${filesuffix}.erb"),
     notify  => Service['libvirtd'],
     require => Package['libvirt'],
   }
@@ -97,7 +104,7 @@ class libvirt (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('libvirt/sasl2/libvirt.conf.erb'),
+    content => template("libvirt/sasl2/libvirt.conf${filesuffix}.erb"),
     notify  => Service['libvirtd'],
     require => Package['libvirt'],
   }
@@ -125,7 +132,7 @@ class libvirt (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('libvirt/sasl2/qemu-kvm.conf.erb'),
+      content => template("libvirt/sasl2/qemu-kvm.conf${filesuffix}.erb"),
       notify  => Service['libvirtd'],
       require => [Package['libvirt'], Package['qemu-kvm']]
     }
