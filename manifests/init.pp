@@ -31,6 +31,8 @@ class libvirt (
   $virtinst_package          = $::libvirt::params::virtinst_package,
   $radvd_package             = $::libvirt::params::radvd_package,
   $sysconfig                 = $::libvirt::params::sysconfig,
+  $defaults_file             = $::libvirt::params::defaults_file,
+  $defaults_template         = $::libvirt::params::defaults_template,
   $deb_default               = $::libvirt::params::deb_default,
   # libvirtd.conf options
   $listen_tls                = undef,
@@ -141,30 +143,17 @@ class libvirt (
     package { $radvd_package: ensure => installed }
   }
 
-  # Optional changes to the sysconfig file (on RedHat)
-  if $sysconfig != false {
-    file { '/etc/sysconfig/libvirtd':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template("${module_name}/sysconfig/libvirtd.erb"),
-      notify  => Service['libvirtd'],
-    }
-  }
-
-  # Optional changes to the /etc/default file (on Debian)
-  if $deb_default != false {
-    file { '/etc/default/libvirt-bin':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template("${module_name}/default/libvirt-bin.erb"),
-      notify  => Service['libvirtd'],
-    }
+  # Optional changes to the sysconfig file (on RedHat), or the defaults file
+  file { 'defaults_file':
+    path    => $defaults_file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template($defaults_template),
+    notify  => Service['libvirtd'],
   }
 
   # Create Optional networks
   create_resources(libvirt::network, $networks, $networks_defaults)
 
 }
-

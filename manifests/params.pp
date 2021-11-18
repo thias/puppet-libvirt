@@ -15,6 +15,8 @@ class libvirt::params {
       }
       $radvd_package = 'radvd'
       $sysconfig = {}
+      $defaults_file = '/etc/sysconfig/libvirtd'
+      $defaults_template = "${module_name}/sysconfig/libvirtd.erb"
       $deb_default = false
       $auth_unix_ro = false
       $unix_sock_rw_perms = false
@@ -26,6 +28,8 @@ class libvirt::params {
       $virtinst_package = 'virtinst'
       $radvd_package = 'radvd'
       $sysconfig = false
+      $defaults_file = '/etc/default/libvirt-bin'
+      $defaults_template = "${module_name}/default/libvirt-bin.erb"
       $deb_default = {}
       # UNIX socket
       $auth_unix_ro = 'none'
