@@ -19,12 +19,7 @@
 # using this capability.
 #
 # This is enabled by default, uncomment this to disable it
-#listen_tls = 0
-<% if @listen_tls == true -%>
-listen_tls = 1
-<% elsif @listen_tls == false -%>
-listen_tls = 0
-<% end -%>
+<% unless defined?(@listen_tls) %>#<% end %>listen_tls = <%= defined?(@listen_tls) && (@listen_tls ? '1' : '0') || '0' %>
 
 # Listen for unencrypted TCP connections on the public TCP/IP port.
 # NB, must pass the --listen flag to the libvirtd process for this to
@@ -35,39 +30,25 @@ listen_tls = 0
 # DIGEST_MD5 and GSSAPI (Kerberos5)
 #
 # This is disabled by default, uncomment this to enable it.
-#listen_tcp = 1
-<% if @listen_tcp == true -%>
-listen_tcp = 1
-<% elsif @listen_tcp == false -%>
-listen_tcp = 0
-<% end -%>
+<% unless defined?(@listen_tcp) %>#<% end %>listen_tcp = <%= defined?(@listen_tcp) && (@listen_tcp ? '1' : '0') || '1' %>
 
 
 
 # Override the port for accepting secure TLS connections
 # This can be a port number, or service name
 #
-#tls_port = "16514"
-<% if @tls_port -%>
-tls_port = "<%= @tls_port %>"
-<% end -%>
+<% unless @tls_port %>#<% end %>tls_port = "<%= @tls_port || '16514' %>"
 
 # Override the port for accepting insecure TCP connections
 # This can be a port number, or service name
 #
-#tcp_port = "16509"
-<% if @tcp_port -%>
-tcp_port = "<%= @tcp_port %>"
-<% end -%>
+<% unless @tcp_port %>#<% end %>tcp_port = "<%= @tcp_port || '16509' %>"
 
 
 # Override the default configuration which binds to all network
 # interfaces. This can be a numeric IPv4/6 address, or hostname
 #
-#listen_addr = "192.168.0.1"
-<% if @listen_addr -%>
-listen_addr = "<%= @listen_addr %>"
-<% end -%>
+<% unless @listen_addr %>#<% end %>listen_addr = "<%= @listen_addr || '192.168.0.1' %>"
 
 
 # Flag toggling mDNS advertizement of the libvirt service.
@@ -100,20 +81,14 @@ mdns_adv = 0
 # without becoming root.
 #
 # This is restricted to 'root' by default.
-#unix_sock_group = "libvirt"
-<% if @unix_sock_group -%>
-unix_sock_group = "<%= @unix_sock_group %>"
-<% end -%>
+<% unless @unix_sock_group %>#<% end %>unix_sock_group = "<%= @unix_sock_group || 'libvirt' %>"
 
 # Set the UNIX socket permissions for the R/O socket. This is used
 # for monitoring VM status only
 #
 # Default allows any user. If setting group ownership may want to
 # restrict this to:
-#unix_sock_ro_perms = "0777"
-<% if @unix_sock_ro_perms -%>
-unix_sock_ro_perms = "<%= @unix_sock_ro_perms %>"
-<% end -%>
+<% unless @unix_sock_ro_perms %>#<% end %>unix_sock_ro_perms = "<%= @unix_sock_ro_perms || '0777' %>"
 
 # Set the UNIX socket permissions for the R/W socket. This is used
 # for full management of VMs
@@ -123,16 +98,10 @@ unix_sock_ro_perms = "<%= @unix_sock_ro_perms %>"
 #
 # If not using PolicyKit and setting group ownership for access
 # control then you may want to relax this to:
-#unix_sock_rw_perms = "0770"
-<% if @unix_sock_rw_perms -%>
-unix_sock_rw_perms = "<%= @unix_sock_rw_perms %>"
-<% end -%>
+<% unless @unix_sock_rw_perms %>#<% end %>unix_sock_rw_perms = "<%= @unix_sock_rw_perms || '0770' %>"
 
 # Set the name of the directory in which sockets will be found/created.
-#unix_sock_dir = "/var/run/libvirt"
-<% if @unix_sock_dir -%>
-unix_sock_dir = "<%= @unix_sock_dir %>"
-<% end -%>
+<% unless @unix_sock_dir %>#<% end %>unix_sock_dir = "<%= @unix_sock_dir || '/var/run/libvirt' %>"
 
 #################################################################
 #
@@ -160,10 +129,7 @@ unix_sock_dir = "<%= @unix_sock_dir %>"
 #
 # To restrict monitoring of domains you may wish to enable
 # an authentication mechanism here
-#auth_unix_ro = "none"
-<%- if @auth_unix_ro -%>
-auth_unix_ro = "<%= @auth_unix_ro %>"
-<%- end -%>
+<% unless @auth_unix_ro %>#<% end %>auth_unix_ro = "<%= @auth_unix_ro || 'none' %>"
 
 # Set an authentication scheme for UNIX read-write sockets
 # By default socket permissions only allow root. If PolicyKit
@@ -172,10 +138,7 @@ auth_unix_ro = "<%= @auth_unix_ro %>"
 #
 # If the unix_sock_rw_perms are changed you may wish to enable
 # an authentication mechanism here
-#auth_unix_rw = "none"
-<%- if @auth_unix_rw -%>
-auth_unix_rw = "<%= @auth_unix_rw %>"
-<%- end -%>
+<% unless @auth_unix_rw %>#<% end %>auth_unix_rw = "<%= @auth_unix_rw || 'none' %>"
 
 # Change the authentication scheme for TCP sockets.
 #
@@ -183,10 +146,7 @@ auth_unix_rw = "<%= @auth_unix_rw %>"
 # Don't do this outside of a dev/test scenario. For real world
 # use, always enable SASL and use the GSSAPI or DIGEST-MD5
 # mechanism in /etc/sasl2/libvirt.conf
-#auth_tcp = "sasl"
-<% if @auth_tcp -%>
-auth_tcp = "<%= @auth_tcp %>"
-<% end -%>
+<% unless @auth_tcp %>#<% end %>auth_tcp = "<%= @auth_tcp || 'sasl' %>"
 
 # Change the authentication scheme for TLS sockets.
 #
@@ -195,10 +155,7 @@ auth_tcp = "<%= @auth_tcp %>"
 #
 # It is possible to make use of any SASL authentication
 # mechanism as well, by using 'sasl' for this option
-#auth_tls = "none"
-<% if @auth_tls -%>
-auth_tls = "<%= @auth_tls %>"
-<% end -%>
+<% unless @auth_tls %>#<% end %>auth_tls = "<%= @auth_tls || 'none' %>"
 
 
 
