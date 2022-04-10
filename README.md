@@ -109,11 +109,11 @@ libvirt::network { 'dual-stack':
 }
 ```
 
-While this might look a little convoluted in puppet code, this gives you the ability to specify networks in hiera, and then use `create_resources()` to  generate them:
+You can also define networks to be created by this class as a class parameter (`libvirt_networks` or via hiera:
 
 ```yaml
 ---
-libvirt_networks:
+libvirt::libvirt_networks:
 
   pxe:
     autostart:    true
@@ -132,13 +132,6 @@ libvirt_networks:
     forward_dev: br0
     forward_interfaces:
       - eth0
-```
-
-and then in your manifest:
-
-```puppet
-$networks = hiera('libvirt_networks', [])
-create_resources($networks, $your_defaults_for_a_network)
 ```
 
 On Red Hat Enterprise Linux, you might want to also manage changes to the

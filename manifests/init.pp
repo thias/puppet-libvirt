@@ -60,6 +60,8 @@ class libvirt (
   $sasl2_qemu_mech_list      = undef,
   $sasl2_qemu_keytab         = undef,
   $sasl2_qemu_auxprop_plugin = undef,
+  # libvirt networks
+  $libvirt_networks          = undef
 ) inherits ::libvirt::params {
 
   # Keep multiple templates, as close to the original as possible
@@ -120,6 +122,9 @@ class libvirt (
     forward_mode => 'nat',
     bridge       => 'virbr0',
     ip           => [ $::libvirt::params::default_ip ],
+  }
+  if $libvirt_networks {
+    create_resources('libvirt::network', $libvirt_networks)
   }
 
   # The most useful libvirt-related packages
