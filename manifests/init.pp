@@ -154,7 +154,7 @@ class libvirt (
 
   # Optional changes to the /etc/default file (on Debian)
   if $deb_default != false {
-    file { '/etc/default/libvirt-bin':
+    file { "/etc/default/${libvirt_service}":
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
