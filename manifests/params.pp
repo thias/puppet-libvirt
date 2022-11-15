@@ -7,7 +7,11 @@ class libvirt::params {
   case $::osfamily {
     'RedHat': {
       $libvirt_package = "libvirt.${::architecture}"
-      $libvirt_service = 'libvirtd'
+      if versioncmp($::operatingsystemmajrelease, '9') >= 0 {
+        $libvirt_service = 'virtqemud'
+      } else {
+        $libvirt_service = 'libvirtd'
+      }
       if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
         $virtinst_package = 'virt-install'
       } else {
