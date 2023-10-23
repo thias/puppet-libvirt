@@ -49,6 +49,7 @@ class libvirt (
   $unix_sock_dir             = undef,
   # qemu.conf options
   $qemu_vnc_listen           = undef,
+  $qemu_vnc_password         = undef,
   $qemu_vnc_sasl             = undef,
   $qemu_vnc_tls              = undef,
   $qemu_set_process_name     = undef,
