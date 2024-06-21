@@ -1,5 +1,3 @@
-# Class: libvirt
-#
 # Install, enable and configure libvirt.
 #
 # Parameters:
@@ -60,6 +58,13 @@ class libvirt (
   $sasl2_qemu_mech_list      = undef,
   $sasl2_qemu_keytab         = undef,
   $sasl2_qemu_auxprop_plugin = undef,
+  # libvirt hooks
+  $daemon_hook_content       = undef,
+  $daemon_hook_source        = undef,
+  $qemu_hook_content         = undef,
+  $qemu_hook_source          = undef,
+  $network_hook_content      = undef,
+  $network_hook_source       = undef,
 ) inherits ::libvirt::params {
 
   # Keep multiple templates, as close to the original as possible
@@ -160,6 +165,37 @@ class libvirt (
       mode    => '0644',
       content => template("${module_name}/default/libvirt-bin.erb"),
       notify  => Service['libvirtd'],
+    }
+  }
+
+  if $daemon_hook_content and $daemon_hook_source {
+    fail('daemon_hook_content and daemon_hook_source cannot be used together')
+  } elsif $daemon_hook_content or $daemon_hook_source {
+    file { '/etc/libvirt/hooks/daemon':
+      ensure  => present,
+      source  => $daemon_hook_source,
+      content => $daemon_hook_content,
+      mode    => '0755'
+    }
+  }
+  if $qemu_hook_content and $qemu_hook_source {
+    fail('qemu_hook_content and qemu_hook_source cannot be used together')
+  } elsif $daemon_hook_content or $daemon_hook_source {
+    file { '/etc/libvirt/hooks/qemu':
+      ensure  => present,
+      source  => $qemu_hook_source,
+      content => $qemu_hook_content,
+      mode    => '0755'
+    }
+  }
+  if $network_hook_content and $network_hook_source {
+    fail('network_hook_content and network_hook_source cannot be used together')
+  } elsif $network_hook_content or $network_hook_source {
+    file { '/etc/libvirt/hooks/network':
+      ensure  => present,
+      source  => $network_hook_source,
+      content => $network_hook_content,
+      mode    => '0755'
     }
   }
 
