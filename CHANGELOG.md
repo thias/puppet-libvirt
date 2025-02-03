@@ -1,3 +1,6 @@
+* Remove legacy facts usage.
+* Remove obsolete validate functions.
+
 #### 2021-06-30 - 1.0.1
 * Add support for Linux Mint (#55, @ssaki).
 * Add support for RHEL8 with templates as close to the original as possible.

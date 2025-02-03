@@ -4,15 +4,15 @@
 #
 class libvirt::params {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-      $libvirt_package = "libvirt.${::architecture}"
-      if versioncmp($::operatingsystemmajrelease, '9') >= 0 {
+      $libvirt_package = "libvirt.${facts['os']['architecture']}"
+      if versioncmp($facts['os']['release']['major'], '9') >= 0 {
         $libvirt_service = 'virtqemud'
       } else {
         $libvirt_service = 'libvirtd'
       }
-      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '7') >= 0 {
         $virtinst_package = 'virt-install'
       } else {
         $virtinst_package = 'python-virtinst'
@@ -35,7 +35,7 @@ class libvirt::params {
       $auth_unix_ro = 'none'
       $unix_sock_rw_perms = '0770'
       $auth_unix_rw = 'none'
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Ubuntu', 'LinuxMint': {
           $libvirt_service = 'libvirt-bin'
           $unix_sock_group = 'libvirtd'

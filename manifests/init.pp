@@ -63,7 +63,7 @@ class libvirt (
 ) inherits ::libvirt::params {
 
   # Keep multiple templates, as close to the original as possible
-  if $::osfamily == 'RedHat' and versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+  if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '8') >= 0 {
     $filesuffix = '-el8'
   } else {
     $filesuffix = ''
