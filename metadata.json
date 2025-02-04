@@ -1,6 +1,6 @@
 {
   "name": "thias-libvirt",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Matthias Saou",
   "license": "Apache-2.0",
   "summary": "Libvirt virtualization API and capabilities.",
